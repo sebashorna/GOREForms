@@ -1,0 +1,53 @@
+# =========================================================================
+# ARCHIVO .GITIGNORE GENERAL - PROYECTO GORE
+# Ubicación CUsersLENOVODocumentsGORE.gitignore
+# =========================================================================
+
+# --- DEPENDENCIAS (No subir porque se recrean con 'npm install') ---
+node_modules
+node_modules
+
+# --- CONFIGURACIONES LOCALES E IDEs ---
+.vscode
+.idea
+.suo
+.ntvs
+.njsproj
+.sln
+.sw
+
+# --- FRONTEND (Angular  Vitest) ---
+frontend-gore.angular
+frontend-goredist
+frontend-goretmp
+frontend-goreout-tsc
+frontend-gorebazel-out
+frontend-gore.cache
+frontend-gorecoverage
+frontend-gore.vite
+
+# Archivos de depuración y logs de NPM
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+pnpm-debug.log
+.log
+
+# --- BACKEND (Node.js  Express  Prisma) ---
+backend-goredist
+backend-goreout
+backend-gorebuild
+
+# --- SEGURIDAD Y CREDENCIALES (¡CRÍTICO! No subir credenciales a GitHub) ---
+.env
+backend-gore.env
+frontend-gore.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# --- SISTEMA OPERATIVO ---
+Thumbs.db
+desktop.ini
+.DS_Store
