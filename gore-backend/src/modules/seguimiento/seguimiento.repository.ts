@@ -1,5 +1,6 @@
 import { prisma } from "../../config/prisma";
 import { CrearSeguimientoDTO } from "./dto/crear-seguimiento.dto";
+import { ActualizarSeguimientoDTO } from "./dto/actualizar-seguimiento.dto";
 
 export class SeguimientoRepository {
 
@@ -27,5 +28,19 @@ export class SeguimientoRepository {
         data,
     });
   }
+
+  async update(id: number, data: ActualizarSeguimientoDTO) {
+
+    return prisma.seguimiento_proyectos.update({
+
+        where: {
+            id
+        },
+
+        data
+
+    });
+
+}
 
 }

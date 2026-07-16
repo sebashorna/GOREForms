@@ -1,5 +1,6 @@
 import { SeguimientoRepository } from "./seguimiento.repository";
 import { CrearSeguimientoDTO } from "./dto/crear-seguimiento.dto";
+import { ActualizarSeguimientoDTO } from "./dto/actualizar-seguimiento.dto";
 
 export class SeguimientoService {
 
@@ -14,7 +15,14 @@ export class SeguimientoService {
     }
 
     async crear(data: CrearSeguimientoDTO) {
-    return await this.repository.create(data);
+        return await this.repository.create(data);
     }
 
+    async buscarPorId(id: number) {
+        return this.repository.findById(id);
+    }
+
+    async actualizar(id: number, data: ActualizarSeguimientoDTO) {
+        return this.repository.update(id, data);
+    }
 }

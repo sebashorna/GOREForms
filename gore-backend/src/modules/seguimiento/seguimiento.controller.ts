@@ -96,6 +96,66 @@ export class SeguimientoController {
 
     }
 
+    async buscarPorId(req: Request, res: Response) {
+
+    const id = Number(req.params.id);
+
+    if (isNaN(id)) {
+        return fail(res, "El ID debe ser un número.", 400);
+    }
+
+    try {
+
+        const proyecto = await service.buscarPorId(id);
+
+        if (!proyecto) {
+            return fail(res, "Proyecto no encontrado.", 404);
+        }
+
+        return success(res, proyecto);
+
+    } catch (err) {
+
+        console.error(err);
+
+            return fail(res, "Error al buscar el proyecto.");
+
+        }
+
+    }
     
+    async actualizar(req: Request, res: Response) {
+
+    const id = Number(req.params.id);
+
+    if (isNaN(id)) {
+        return fail(res, "El ID debe ser un número.", 400);
+    }
+
+    try {
+
+        const existente = await service.buscarPorId(id);
+
+        if (!existente) {
+            return fail(res, "Proyecto no encontrado.", 404);
+        }
+
+        const proyecto = await service.actualizar(id, req.body);
+
+        return success(
+            res,
+            proyecto,
+            "Proyecto actualizado correctamente."
+        );
+
+    } catch (err) {
+
+            console.error(err);
+
+            return fail(res, "No fue posible actualizar el proyecto.");
+
+        }
+
+    }
 
 }
