@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const seguimiento_controller_1 = require("./seguimiento.controller");
+const router = (0, express_1.Router)();
+const controller = new seguimiento_controller_1.SeguimientoController();
+router.get("/", controller.listar);
+router.get("/:id", controller.obtener);
+router.post("/", controller.crear);
+exports.default = router;
