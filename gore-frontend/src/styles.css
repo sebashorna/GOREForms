@@ -1,1 +1,41 @@
 /* You can add global styles to this file, and also import other style files */
+/*====================================
+=        COLORES INSTITUCIONALES
+=====================================*/
+
+:root{
+
+    --primary:#571414;
+    --secondary:#E68F1B;
+
+    --white:#FFFFFF;
+
+    --background:#F4F6F9;
+
+    --text:#333333;
+
+}
+
+/*====================================
+=        RESET
+=====================================*/
+
+*{
+
+    margin:0;
+
+    padding:0;
+
+    box-sizing:border-box;
+
+    font-family: "Segoe UI", sans-serif;
+
+}
+
+body{
+
+    background:var(--background);
+
+    color:var(--text);
+
+}

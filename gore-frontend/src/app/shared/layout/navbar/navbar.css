@@ -1,0 +1,221 @@
+.navbar{
+
+    height:75px;
+
+    background:#571414;
+
+    color:#FFFFFF;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:0 30px;
+
+    box-shadow:0 3px 10px rgba(0,0,0,.15);
+
+    position:relative;
+
+    z-index:1000;
+
+}
+
+/* =========================
+   Logo
+========================= */
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+}
+
+.logo img{
+
+    width:48px;
+
+    height:48px;
+
+    border-radius:6px;
+
+    object-fit:cover;
+
+}
+
+.logo h4{
+
+    margin:0;
+
+    font-size:1.9rem;
+
+    font-weight:700;
+
+}
+
+.logo small{
+
+    display:block;
+
+    margin-top:2px;
+
+    font-size:.9rem;
+
+    opacity:.85;
+
+}
+
+/* =========================
+   Usuario
+========================= */
+
+.user-menu{
+
+    position:relative;
+
+}
+
+.user-button{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    background:none;
+
+    border:none;
+
+    color:white;
+
+    cursor:pointer;
+
+    padding:8px 12px;
+
+    border-radius:10px;
+
+    transition:.2s;
+
+}
+
+.user-button:hover{
+
+    background:rgba(255,255,255,.08);
+
+}
+
+.avatar{
+
+    width:38px;
+
+    height:38px;
+
+    border-radius:50%;
+
+    background:#E68F1B;
+
+    color:#571414;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-weight:700;
+
+    font-size:16px;
+
+}
+
+.flecha{
+
+    font-size:11px;
+
+    opacity:.8;
+
+}
+
+/* =========================
+   Dropdown
+========================= */
+
+.dropdown{
+
+    position:absolute;
+
+    top:55px;
+
+    right:0;
+
+    min-width:190px;
+
+    background:#FFFFFF;
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.18);
+
+    animation:fadeDown .18s ease;
+
+}
+
+.dropdown-item{
+
+    width:100%;
+
+    padding:14px 18px;
+
+    background:#FFFFFF;
+
+    border:none;
+
+    text-align:left;
+
+    font-size:14px;
+
+    color:#333;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.dropdown-item:hover{
+
+    background:#F7F7F7;
+
+}
+
+/* =========================
+   Animación
+========================= */
+
+@keyframes fadeDown{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(-8px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}

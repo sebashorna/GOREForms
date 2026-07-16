@@ -1,0 +1,195 @@
+.login-container{
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:30px;
+
+    background:linear-gradient(
+        180deg,
+        #F8F9FB 0%,
+        #EEF2F7 100%
+    );
+
+}
+
+.login-card{
+
+    width:430px;
+
+    background:#FFFFFF;
+
+    padding:45px;
+
+    border-radius:20px;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.08);
+
+    text-align:center;
+
+}
+
+.logo{
+
+    width:105px;
+
+    margin-bottom:20px;
+
+    user-select:none;
+
+}
+
+.login-card h2{
+
+    color:#571414;
+
+    font-weight:700;
+
+    font-size:2rem;
+
+    margin-bottom:8px;
+
+}
+
+.login-card p{
+
+    color:#666;
+
+    font-size:1.05rem;
+
+    margin-bottom:18px;
+
+}
+
+.linea{
+
+    width:90px;
+
+    height:4px;
+
+    background:#E68F1B;
+
+    margin:20px auto 35px;
+
+    border-radius:20px;
+
+}
+
+form{
+
+    margin-top:10px;
+
+}
+
+.form-label{
+
+    display:block;
+
+    text-align:left;
+
+    color:#555;
+
+    font-weight:600;
+
+    margin-bottom:8px;
+
+}
+
+.form-control{
+
+    height:52px;
+
+    border-radius:12px;
+
+    border:1px solid #D8D8D8;
+
+    background:#FAFAFA;
+
+    padding:0 16px;
+
+    font-size:15px;
+
+    box-shadow:none;
+
+    transition:all .25s ease;
+
+    width:95%;
+
+    margin-left:-5%;
+
+}
+
+.form-control::placeholder{
+
+    color:#A0A0A0;
+
+}
+
+.form-control:focus{
+
+    background:#FFFFFF;
+
+    border-color:#571414;
+
+    box-shadow:0 0 0 .2rem rgba(87,20,20,.15);
+
+}
+
+.btn-login{
+
+    width:100%;
+
+    height:52px;
+
+    margin-top:10px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#571414;
+
+    color:#FFFFFF;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:all .25s ease;
+
+}
+
+.btn-login:hover{
+
+    background:#451010;
+
+    transform:translateY(-2px);
+
+    box-shadow:0 8px 20px rgba(87,20,20,.25);
+
+}
+
+.btn-login:active{
+
+    transform:translateY(0);
+
+}
+
+small{
+
+    display:block;
+
+    margin-top:30px;
+
+    color:#888;
+
+    font-size:.9rem;
+
+}

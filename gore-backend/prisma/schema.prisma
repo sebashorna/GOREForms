@@ -5,6 +5,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  schemas  = ["public", "salud_gore"]
 }
 
 model acceso_dashboard {
@@ -17,6 +18,32 @@ model acceso_dashboard {
 
   @@index([proyecto_id], map: "idx_acceso_dashboard_proyecto_id")
   @@index([proyecto_id], map: "idx_proyecto_id")
+  @@schema("public")
+}
+
+model login_2fa {
+  id             Int       @id @default(autoincrement())
+  id_usuario     Int
+  codigo         String?   @db.VarChar(6)
+  expiracion     DateTime? @db.Timestamp(6)
+  usado          Boolean?  @default(false)
+  fecha_creacion DateTime? @default(now()) @db.Timestamp(6)
+  usuarios       usuarios  @relation(fields: [id_usuario], references: [id_usuario], onDelete: Cascade, onUpdate: NoAction, map: "fk_usuario")
+
+  @@schema("public")
+}
+
+model login_auditoria {
+  id         Int       @id @default(autoincrement())
+  id_usuario Int?
+  usuario    String?   @db.VarChar(50)
+  ip         String?   @db.VarChar(50)
+  navegador  String?
+  exito      Boolean?
+  motivo     String?
+  fecha      DateTime? @default(now()) @db.Timestamp(6)
+
+  @@schema("public")
 }
 
 model seguimiento_proyectos {
@@ -31,4 +58,179 @@ model seguimiento_proyectos {
   acciones_programadas      String?
   fecha_registro            DateTime?          @default(now()) @db.Timestamp(6)
   acceso_dashboard          acceso_dashboard[]
+
+  @@schema("public")
+}
+
+model sesiones {
+  id           Int       @id @default(autoincrement())
+  id_usuario   Int?
+  token        String?   @db.Uuid
+  fecha_inicio DateTime? @default(now()) @db.Timestamp(6)
+  fecha_expira DateTime? @db.Timestamp(6)
+  activo       Boolean?  @default(true)
+  ip           String?   @db.VarChar(50)
+  usuarios     usuarios? @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction)
+
+  @@schema("public")
+}
+
+model usuarios {
+  id_usuario        Int         @id @default(autoincrement())
+  usuario           String      @unique @db.VarChar(50)
+  correo            String      @unique @db.VarChar(150)
+  password_hash     String
+  estado            Boolean?    @default(true)
+  intentos_fallidos Int?        @default(0)
+  bloqueado_hasta   DateTime?   @db.Timestamp(6)
+  ultimo_login      DateTime?   @db.Timestamp(6)
+  creado            DateTime?   @default(now()) @db.Timestamp(6)
+  login_2fa         login_2fa[]
+  sesiones          sesiones[]
+
+  @@schema("public")
+}
+
+model condiciones_basicas {
+  id_condiciones   Int              @id
+  agua             Boolean?
+  desague          Boolean?
+  electricidad     Boolean?
+  oxigeno          Boolean?
+  internet         Boolean?
+  id_renaes        Int
+  fecha_corte      DateTime?        @db.Date
+  fecha_registro   DateTime?        @default(now()) @db.Timestamp(6)
+  establecimientos establecimientos @relation(fields: [id_renaes], references: [id_renaes], onDelete: Cascade, onUpdate: NoAction, map: "fk_condiciones")
+
+  @@schema("salud_gore")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model epidemiologia {
+  id_epi                 Int               @id @default(autoincrement())
+  id_renaes              Int?
+  anho_epi               Int
+  semana_epi             Int?
+  casos_dengue           Int?              @default(0)
+  casos_anemia           Int?              @default(0)
+  mort_materna           Int?              @default(0)
+  fecha_corte            DateTime          @db.Date
+  fecha_registro_sistema DateTime?         @default(now()) @db.Timestamp(6)
+  casos_desnutricion     Int?
+  iras_edas              Int?
+  mortalidad_neonatal    Int?
+  establecimientos       establecimientos? @relation(fields: [id_renaes], references: [id_renaes], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([id_renaes, fecha_corte])
+  @@schema("salud_gore")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model equipamiento_estado {
+  id_registro            Int               @id @default(autoincrement())
+  id_renaes              Int?
+  camas_uci_tot          Int?              @default(0)
+  camas_uci_disp         Int?              @default(0)
+  equipo_rayos_x         Boolean?          @default(false)
+  planta_oxigeno         Boolean?          @default(false)
+  estado_infra           Int?
+  fecha_corte            DateTime          @db.Date
+  fecha_registro_sistema DateTime?         @default(now()) @db.Timestamp(6)
+  ventiladores           Int?
+  monitores              Int?
+  camas_hospitalarias    Int?
+  operativo              Decimal?          @db.Decimal(5, 2)
+  inoperativo            Decimal?          @db.Decimal(5, 2)
+  ecografo               Boolean?
+  tomografo              Boolean?
+  establecimientos       establecimientos? @relation(fields: [id_renaes], references: [id_renaes], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([id_renaes, fecha_corte])
+  @@schema("salud_gore")
+}
+
+model establecimientos {
+  id_renaes              Int                   @id
+  nombre_eess            String                @db.VarChar(150)
+  categoria              String                @db.VarChar(10)
+  red_salud              String                @db.VarChar(50)
+  microred               String?               @db.VarChar(100)
+  ubigeo                 Int
+  coord_lat              Decimal?              @db.Decimal(10, 8)
+  coord_long             Decimal?              @db.Decimal(11, 8)
+  poblacion_asignada     Int?                  @default(0)
+  fecha_registro_sistema DateTime?             @default(now()) @db.Timestamp(6)
+  tipo                   String?               @db.VarChar(250)
+  distrito               String?               @db.VarChar(250)
+  provincia              String?               @db.VarChar(250)
+  condiciones_basicas    condiciones_basicas[]
+  epidemiologia          epidemiologia[]
+  equipamiento_estado    equipamiento_estado[]
+  proyectos_inversion    proyectos_inversion[]
+  recursos_humanos       recursos_humanos[]
+  servicios              servicios[]
+
+  @@schema("salud_gore")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model proyectos_inversion {
+  id_proyecto            Int               @id
+  id_renaes              Int?
+  estado_inversion       String            @db.VarChar(50)
+  avance_fisico          Decimal?          @db.Decimal(5, 2)
+  avance_financiero      Decimal?          @db.Decimal(5, 2)
+  monto_total            Decimal?          @db.Decimal(15, 2)
+  fecha_corte            DateTime          @db.Date
+  fecha_registro_sistema DateTime?         @default(now()) @db.Timestamp(6)
+  tipo                   String?           @db.VarChar(250)
+  unidad_ejecutora       String?           @db.VarChar(250)
+  monto_devengado        Decimal?          @db.Decimal(15, 2)
+  establecimientos       establecimientos? @relation(fields: [id_renaes], references: [id_renaes], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([id_renaes, fecha_corte])
+  @@schema("salud_gore")
+}
+
+model recursos_humanos {
+  id_rh                  Int               @id @default(autoincrement())
+  id_renaes              Int?
+  med_prog               Int
+  med_exist              Int
+  brecha_med             Int?              @default(dbgenerated("(med_prog - med_exist)"))
+  turno_24h              Boolean?          @default(false)
+  fecha_corte            DateTime          @db.Date
+  fecha_registro_sistema DateTime?         @default(now()) @db.Timestamp(6)
+  enfermeras             Int?
+  tecnicos               Int?
+  pediatra               Int?
+  gineco_obstetra        Int?
+  anestesiologo          Int?
+  cirujano_general       Int?
+  intensivista           Int?
+  internista             Int?
+  cardiologo             Int?
+  traumatologo           Int?
+  otros_especialistas    Int?
+  establecimientos       establecimientos? @relation(fields: [id_renaes], references: [id_renaes], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([id_renaes, fecha_corte])
+  @@schema("salud_gore")
+}
+
+model servicios {
+  id_servicios           Int              @id
+  emergencia             Boolean?
+  uci                    Boolean?
+  centro_quirurgico      Boolean?
+  partos                 Boolean?
+  consultas_diarias_prom Decimal?         @db.Decimal(5, 2)
+  camas_ocupadas         Int?
+  id_renaes              Int
+  fecha_corte            DateTime?        @db.Date
+  fecha_registro         DateTime?        @default(now()) @db.Timestamp(6)
+  establecimientos       establecimientos @relation(fields: [id_renaes], references: [id_renaes], onDelete: Cascade, onUpdate: NoAction, map: "fk_servicios")
+
+  @@schema("salud_gore")
 }
