@@ -5,6 +5,8 @@ import compression from "compression";
 import cookieParser from "cookie-parser";
 
 import seguimientoRoutes from "./modules/seguimiento/seguimiento.routes";
+import dashboardRoutes from "./modules/dashboard/dashboard.routes";
+
 
 const app = express();
 
@@ -40,5 +42,7 @@ app.get("/", (_, res) => {
 });
 
 app.use("/api/seguimiento", seguimientoRoutes);
+
+app.use("/api/dashboard", dashboardRoutes);
 
 export default app;

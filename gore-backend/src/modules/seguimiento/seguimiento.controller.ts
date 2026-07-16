@@ -158,4 +158,41 @@ export class SeguimientoController {
 
     }
 
+    async eliminar(req: Request, res: Response) {
+
+        const id = Number(req.params.id);
+
+        if (isNaN(id)) {
+            return fail(res, "El ID debe ser un número.", 400);
+        }
+
+        try {
+
+            const proyecto = await service.buscarPorId(id);
+
+            if (!proyecto) {
+                return fail(res, "Proyecto no encontrado.", 404);
+            }
+
+            await service.eliminar(id);
+
+            return success(
+                res,
+                null,
+                "Proyecto eliminado correctamente."
+            );
+
+        } catch (err) {
+
+            console.error(err);
+
+            return fail(
+                res,
+                "No fue posible eliminar el proyecto."
+            );
+
+        }
+
+    }
+
 }

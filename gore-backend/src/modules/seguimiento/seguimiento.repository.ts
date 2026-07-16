@@ -40,7 +40,14 @@ export class SeguimientoRepository {
         data
 
     });
+  }
 
-}
+  async delete(id: number) {
+    return prisma.seguimiento_proyectos.delete({
+        where: {
+            id
+        }
+    });
+  }
 
 }

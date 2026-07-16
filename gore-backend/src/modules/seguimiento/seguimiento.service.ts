@@ -25,4 +25,8 @@ export class SeguimientoService {
     async actualizar(id: number, data: ActualizarSeguimientoDTO) {
         return this.repository.update(id, data);
     }
+
+    async eliminar(id: number) {
+        return this.repository.delete(id);
+    }
 }
