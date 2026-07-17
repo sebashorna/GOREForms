@@ -1,0 +1,265 @@
+<div class="page-title">
+    <h1>Reporte de Indicadores de Salud</h1>
+</div>
+
+<div class="message">{{ mensajeGuardado }}</div>
+
+<form [formGroup]="form" (ngSubmit)="guardarReporte()" class="main-form-container" id="Salud">
+
+    <div class="form-container">
+        <div class="section-header">
+            <h3>📋 Información General</h3>
+        </div>
+        <div class="form-grid">
+            <div class="form-group full-width">
+                <label for="id_renaes">ID RENAES</label>
+                <input type="number" id="id_renaes" formControlName="id_renaes" (input)="handleIdInput()" (blur)="buscarEstablecimiento()" min="1" max="99999999" step="1" />
+                <div class="field-message warning" *ngIf="idRenaesMensaje">{{ idRenaesMensaje }}</div>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="nombre_eess">Nombre del Establecimiento</label>
+                <input type="text" id="nombre_eess" formControlName="nombre_eess" />
+            </div>
+
+            <div class="form-group">
+                <label for="red">Red de Salud</label>
+                <select id="red_salud" formControlName="red_salud">
+                    <option value="">Seleccione Red</option>
+                    <option value="Chiclayo">Chiclayo</option>
+                    <option value="Lambayeque">Lambayeque</option>
+                    <option value="Ferreñafe">Ferreñafe</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="microred">Microred</label>
+                <input type="text" id="microred" formControlName="microred" />
+            </div>
+
+            <div class="form-group">
+                <label for="categoria">Categoría</label>
+                <select id="categoria" formControlName="categoria">
+                    <option value="">Seleccione Categoría</option>
+                    <option value="I-1">I-1</option>
+                    <option value="I-2">I-2</option>
+                    <option value="I-3">I-3</option>
+                    <option value="I-4">I-4</option>
+                    <option value="II-1">II-1</option>
+                    <option value="II-2">II-2</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="provincia">Provincia</label>
+                <input type="text" id="provincia" formControlName="provincia" />
+            </div>
+
+            <div class="form-group">
+                <label for="distrito">Distrito</label>
+                <input type="text" id="distrito" formControlName="distrito" />
+            </div>
+
+            <div class="form-group">
+                <label for="EESS">Tipo de EESS</label>
+                <input type="text" id="tipo" formControlName="tipo" placeholder="Puesto, Centro, Hospital" />
+            </div>
+
+            <div class="form-group">
+                <label for="coor_latitud">Latitud</label>
+                <input type="text" id="coor_lat" formControlName="coor_lat" />
+            </div>
+
+            <div class="form-group">
+                <label for="coor_longitud">Longitud</label>
+                <input type="text" id="coor_long" formControlName="coor_long" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-container">
+        <div class="section-header">
+            <h3>🏗️ Gestión de Inversiones</h3>
+        </div>
+        <div class="form-grid">
+            <div class="form-group full-width">
+                <label for="id_proyecto">CUI Proyecto</label>
+                <input type="text" id="id_proyecto" formControlName="id_proyecto" />
+            </div>
+
+            <div class="form-group">
+                <label for="estado_inversion">Estado de Inversión</label>
+                <select id="estado_inversion" formControlName="estado_inversion">
+                    <option value="">Seleccione Estado</option>
+                    <option value="En Ejecución">En Ejecución</option>
+                    <option value="Aprobado">Aprobado</option>
+                    <option value="Viable">Viable</option>
+                    <option value="Paralizado">Paralizado</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="Fisico">Avance Físico (%)</label>
+                <input type="number" id="avance_fisico" formControlName="avance_fisico" min="0" max="100" />
+                <div class="field-message" *ngIf="form.get('avance_fisico')?.invalid && form.get('avance_fisico')?.touched">
+                    Ingrese un número válido entre 0 y 100.
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="Monto">Monto Total (S/)</label>
+                <input type="number" id="monto_total" formControlName="monto_total" />
+            </div>
+
+            <div class="form-group">
+                <label for="Financiero">Avance Financiero (%)</label>
+                <input type="number" id="avance_financiero" formControlName="avance_financiero" min="0" max="100" />
+                <div class="field-message" *ngIf="form.get('avance_financiero')?.invalid && form.get('avance_financiero')?.touched">
+                    Ingrese un número válido entre 0 y 100.
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="MontoDev">Monto Devengado (S/)</label>
+                <input type="number" id="monto_devengado" formControlName="monto_devengado" />
+            </div>
+
+            <div class="form-group">
+                <label for="Ejecutora">Unidad Ejecutora</label>
+                <input type="text" id="unidad_ejecutora" formControlName="unidad_ejecutora" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-container">
+        <div class="section-header">
+            <h3>🏥 Capacidad Instalada y Equipamiento</h3>
+        </div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="Totales">Camas UCI Totales</label>
+                <input type="number" id="camas_uci_tot" formControlName="camas_uci_tot" />
+            </div>
+
+            <div class="form-group">
+                <label for="Disponibles">Camas UCI Disponibles</label>
+                <input type="number" id="camas_uci_disp" formControlName="camas_uci_disp" />
+            </div>
+
+            <div class="form-group">
+                <label for="Hospitalarias">Camas Hospitalarias</label>
+                <input type="number" id="camas_hospitalarias" formControlName="camas_hospitalarias" />
+            </div>
+
+            <div class="form-group">
+                <label for="AvanceF">Avance de Equipamiento (%)</label>
+                <input type="number" id="avance_equipamiento" formControlName="avance_equipamiento" min="0" max="100" step="1" />
+                <div class="field-message" *ngIf="form.get('avance_equipamiento')?.invalid && form.get('avance_equipamiento')?.touched">
+                    Ingrese un número válido entre 0 y 100.
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="Rayos">¿Tiene Rayos X?</label>
+                <select id="equipo_rayos_x" formControlName="equipo_rayos_x">
+                    <option value="">Seleccione</option>
+                    <option value="SI">Sí</option>
+                    <option value="NO">No</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="PlantaOxigeno">¿Tiene Planta de Oxígeno?</label>
+                <select id="planta_oxigeno" formControlName="planta_oxigeno">
+                    <option value="">Seleccione</option>
+                    <option value="SI">Sí</option>
+                    <option value="NO">No</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="Infraestructura">Estado Infraestructura (1-5)</label>
+                <input type="number" id="estado_infra" formControlName="estado_infra" min="1" max="5"
+                    placeholder="1. Malo - 5. Óptimo" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-container">
+        <div class="section-header">
+            <h3>👥 Personal y Recursos Humanos</h3>
+        </div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="Programados">Médicos Programados</label>
+                <input type="number" id="med_prog" formControlName="med_prog"/>
+            </div>
+
+            <div class="form-group">
+                <label for="Servicio">Médicos en Servicio (Hoy)</label>
+                <input type="number" id="med_exist" formControlName="med_exist" />
+            </div>
+
+            <div class="form-group full-width">
+                <label for="Horas">¿Atención 24 Horas?</label>
+                <select id="turno_24h" formControlName="turno_24h">
+                    <option value="">Seleccione</option>
+                    <option value="SI">Sí</option>
+                    <option value="NO">No</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-container">
+        <div class="section-header">
+            <h3>🚨 Vigilancia Epidemiológica</h3>
+        </div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="Semana">Semana Epidemiológica</label>
+                <input type="number" id="semana_epi" formControlName="semana_epi" min="1" max="53" />
+            </div>
+
+            <div class="form-group">
+                <label for="Dengue">Casos Dengue (Confirmados)</label>
+                <input type="number" id="casos_dengue" formControlName="casos_dengue" />
+            </div>
+
+            <div class="form-group">
+                <label for="Anemia">Casos Anemia</label>
+                <input type="number" id="casos_anemia" formControlName="casos_anemia" />
+            </div>
+
+            <div class="form-group">
+                <label for="Materna">Mortalidad Materna</label>
+                <input type="number" id="mort_materna" formControlName="mort_materna" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-container">
+        <div class="section-header">
+            <h3>📅 Registro Temporal</h3>
+        </div>
+        <div class="form-grid">
+            <div class="form-group full-width">
+                <label for="fechaCorte">Fecha de Corte de Información</label>
+                <input type="date" id="fecha_corte" formControlName="fecha_corte" />
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-5 mb-4">
+        <button type="button" (click)="limpiarFormulario()" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-counterclockwise me-2"></i>
+            Limpiar
+        </button>
+
+        <button type="submit" [disabled]="form.invalid" class="btn btn-login px-5">
+            <i class="bi bi-floppy me-2"></i>
+            Guardar Reporte
+        </button>
+    </div>
+
+</form>

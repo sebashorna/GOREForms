@@ -58,7 +58,8 @@ class SaludController {
     }
 
     async obtenerPorId(req: Request, res: Response) {
-
+        console.log("Entró a obtenerPorId");
+        console.log(req.params.id);
         try {
 
             const id = Number(req.params.id);

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 
 import { Navbar } from '../navbar/navbar';
 import { Sidebar } from '../sidebar/sidebar';
@@ -16,5 +16,19 @@ import { Sidebar } from '../sidebar/sidebar';
   styleUrl: './main-layout.css'
 })
 export class MainLayout {
-  
+
+    menuAbierto = false;
+
+    constructor(
+        private router: Router
+    ) {}
+
+    cerrarSesion(){
+
+        localStorage.clear();
+
+        this.router.navigate(['/login']);
+
+    }
+
 }

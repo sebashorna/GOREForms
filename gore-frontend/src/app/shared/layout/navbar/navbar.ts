@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -8,10 +9,16 @@ import { Component } from '@angular/core';
 })
 export class Navbar {
   menuAbierto = false;
+  constructor(
+    private router: Router
+  ) {}
 
   cerrarSesion() {
 
-    console.log("Cerrar sesión");
+    // Más adelante eliminaremos aquí el JWT
+    localStorage.clear();
+
+    this.router.navigate(['/login']);
 
   }
 }

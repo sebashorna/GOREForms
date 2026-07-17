@@ -3,14 +3,24 @@ import { Routes } from '@angular/router';
 import { Login } from './pages/login/login';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { MainLayout } from './shared/layout/main-layout/main-layout';
+import { Salud } from './pages/salud/salud';
 
 export const routes: Routes = [
 
+  // Página inicial
+  {
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full'
+  },
+
+  // Login
   {
     path: 'login',
     component: Login
   },
 
+  // Layout principal
   {
     path: '',
     component: MainLayout,
@@ -20,19 +30,23 @@ export const routes: Routes = [
         path: 'dashboard',
         component: Dashboard
       },
-
       {
-        path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full'
-      }
+         path: 'salud',
+         component: Salud
+      },
+      //
+      // {
+      //   path: 'educacion',
+      //   component: Educacion
+      // }
 
     ]
   },
 
+  // Cualquier ruta inexistente
   {
     path: '**',
-    redirectTo: 'dashboard'
+    redirectTo: 'login'
   }
 
 ];
