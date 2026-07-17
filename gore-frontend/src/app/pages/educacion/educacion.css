@@ -1,0 +1,208 @@
+.main-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.btn-limpiar{
+    background:#fff;
+    color:#7A1C1C;
+    border:2px solid #7A1C1C;
+
+    padding:10px 24px;
+    border-radius:10px;
+    font-weight:600;
+
+    transition:.25s;
+}
+
+.btn-limpiar:hover{
+    background:#7A1C1C;
+    color:#fff;
+}
+
+/* ===========================
+   BOTÓN GUARDAR
+=========================== */
+
+.btn-guardar{
+    background:#198754;
+    color:#fff;
+    border:none;
+
+    padding:10px 28px;
+    border-radius:10px;
+
+    font-weight:600;
+
+    transition:all .25s ease;
+
+    box-shadow:0 4px 12px rgba(25,135,84,.25);
+}
+
+.btn-guardar:hover:not(:disabled){
+    background:#157347;
+    color:#fff;
+
+    transform:translateY(-2px);
+
+    box-shadow:0 8px 18px rgba(25,135,84,.35);
+}
+
+.btn-guardar:active:not(:disabled){
+    transform:scale(.98);
+}
+
+/* Estado deshabilitado */
+.btn-guardar:disabled{
+
+    background:#c7c7c7;
+    color:#6c757d;
+
+    cursor:not-allowed;
+
+    box-shadow:none;
+
+    opacity:1;
+
+    transform:none;
+
+}
+
+.form-container {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e9ecef;
+}
+
+.section-header {
+  background-color: #7A1C1C;
+  color: #ffffff;
+  padding: 14px 20px;
+}
+
+.section-header h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  padding: 24px;
+}
+
+.message {
+  display: block;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto 16px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid #7a1c1c;
+  background-color: #fff1f1;
+  color: #7a1c1c;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.message:empty {
+  display: none;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #7a1c1c;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.close-btn:hover {
+  opacity: 1;
+}
+
+.field-message {
+  margin-top: 8px;
+  color: #7a1c1c;
+  background: #fff1f1;
+  border: 1px solid #f5c2c7;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.field-message.warning {
+  background: #fff9e6;
+  border-color: #ffecb3;
+  color: #8a6d00;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #495057;
+}
+
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #212529;
+  transition: all 0.2s ease-in-out;
+}
+
+.form-group input:focus, .form-group select:focus {
+  outline: none;
+  border-color: #7A1C1C;
+  box-shadow: 0 0 0 3px rgba(122, 28, 28, 0.1);
+}
+
+.form-group input[readonly] {
+  background-color: #f8f9fa;
+  color: #6c757d;
+  cursor: not-allowed;
+}
+
+.form-group input.ng-invalid.ng-touched, 
+.form-group select.ng-invalid.ng-touched {
+  border-color: #dc3545;
+  background-color: #fff5f5;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+.full-width {
+  grid-column: span 2;
+}
+
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .full-width {
+    grid-column: span 1;
+  }
+}

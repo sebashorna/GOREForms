@@ -4,6 +4,7 @@ import { Login } from './pages/login/login';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { MainLayout } from './shared/layout/main-layout/main-layout';
 import { Salud } from './pages/salud/salud';
+import { Educacion } from './pages/educacion/educacion';
 
 export const routes: Routes = [
 
@@ -34,11 +35,10 @@ export const routes: Routes = [
          path: 'salud',
          component: Salud
       },
-      //
-      // {
-      //   path: 'educacion',
-      //   component: Educacion
-      // }
+      {
+         path: 'educacion',
+         component: Educacion
+      },
 
     ]
   },

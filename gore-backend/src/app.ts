@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 //import seguimientoRoutes from "./modules/seguimiento/seguimiento.routes";
 import dashboardRoutes from "./modules/dashboard/dashboard.routes";
 import saludRoutes from "./modules/salud/salud.routes";
+import educacionRoutes from "./modules/educacion/educacion.routes";
 
 const app = express();
 
@@ -42,6 +43,7 @@ app.get("/", (_, res) => {
 });
 
 app.use("/api/salud", saludRoutes);
+app.use("/api/educacion", educacionRoutes);
 
 //app.use("/api/seguimiento", seguimientoRoutes);
 
