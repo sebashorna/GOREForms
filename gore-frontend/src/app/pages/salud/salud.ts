@@ -21,6 +21,10 @@ export class Salud {
 
   minDate = this.getTodayString();
 
+  cerrarMensaje(): void {
+    this.mensajeGuardado = '';
+  }
+
   form = this.fb.group({
     //==============================
     // INFORMACIÓN GENERAL
@@ -78,9 +82,9 @@ export class Salud {
 
     camas_hospitalarias: [0],
 
-    equipo_rayos_x: [false],
+    equipo_rayos_x: [''],
 
-    planta_oxigeno: [false],
+    planta_oxigeno: [''],
 
     estado_infra: [1, [Validators.min(1), Validators.max(5)]],
 
@@ -104,7 +108,7 @@ export class Salud {
 
     med_exist: [0],
 
-    turno_24h: [false],
+    turno_24h: [''],
 
     enfermeras: [0],
 
@@ -274,11 +278,11 @@ export class Salud {
     if (!id) return;
 
     this.saludService
-      .obtenerEstablecimiento(id)
+      .obtenerReporteCompleto(id)
 
       .subscribe({
         next: (resp) => {
-          if (!resp.success || !resp.data) {
+          if (!resp.success || !resp.data || !resp.data.establecimiento) {
             this.idRenaesMensaje = 'Establecimiento no existe, se registrará nuevo establecimiento.';
             this.limpiarDatosEstablecimiento();
             const control = this.form.get('id_renaes');
@@ -290,27 +294,109 @@ export class Salud {
           }
 
           this.idRenaesMensaje = '';
-          this.form.patchValue({
-            nombre_eess: resp.data.nombre_eess,
 
-            categoria: resp.data.categoria,
+          const data = resp.data;
+          const e = data.establecimiento;
+          const eq = data.equipamiento;
+          const rh = data.recursos_humanos;
+          const ep = data.epidemiologia;
+          const sv = data.servicios;
+          const cb = data.condiciones_basicas;
+          const pr = data.proyecto;
 
-            red_salud: resp.data.red_salud,
+          const patchValues: Record<string, any> = {};
 
-            microred: resp.data.microred,
+          // Establecimiento
+          if (e) {
+            patchValues['nombre_eess'] = e.nombre_eess || '';
+            patchValues['categoria'] = e.categoria || '';
+            patchValues['red_salud'] = e.red_salud || '';
+            patchValues['microred'] = e.microred || '';
+            patchValues['provincia'] = e.provincia || '';
+            patchValues['distrito'] = e.distrito || '';
+            patchValues['tipo'] = e.tipo || '';
+            patchValues['coord_lat'] = Number(e.coord_lat) || 0;
+            patchValues['coord_long'] = Number(e.coord_long) || 0;
+            patchValues['poblacion_asignada'] = e.poblacion_asignada || 0;
+          }
 
-            provincia: resp.data.provincia,
+          // Equipamiento
+          if (eq) {
+            patchValues['camas_uci_tot'] = eq.camas_uci_tot ?? 0;
+            patchValues['camas_uci_disp'] = eq.camas_uci_disp ?? 0;
+            patchValues['camas_hospitalarias'] = eq.camas_hospitalarias ?? 0;
+            patchValues['equipo_rayos_x'] = eq.equipo_rayos_x ? 'SI' : '';
+            patchValues['planta_oxigeno'] = eq.planta_oxigeno ? 'SI' : '';
+            patchValues['estado_infra'] = eq.estado_infra ?? 1;
+            patchValues['ventiladores'] = eq.ventiladores ?? 0;
+            patchValues['monitores'] = eq.monitores ?? 0;
+            patchValues['ecografo'] = !!eq.ecografo;
+            patchValues['tomografo'] = !!eq.tomografo;
+            patchValues['operativo'] = Number(eq.operativo) || 0;
+            patchValues['inoperativo'] = Number(eq.inoperativo) || 0;
+          }
 
-            distrito: resp.data.distrito,
+          // Recursos Humanos
+          if (rh) {
+            patchValues['med_prog'] = rh.med_prog ?? 0;
+            patchValues['med_exist'] = rh.med_exist ?? 0;
+            patchValues['turno_24h'] = rh.turno_24h ? 'SI' : '';
+            patchValues['enfermeras'] = rh.enfermeras ?? 0;
+            patchValues['tecnicos'] = rh.tecnicos ?? 0;
+            patchValues['pediatra'] = rh.pediatra ?? 0;
+            patchValues['gineco_obstetra'] = rh.gineco_obstetra ?? 0;
+            patchValues['anestesiologo'] = rh.anestesiologo ?? 0;
+            patchValues['cirujano_general'] = rh.cirujano_general ?? 0;
+            patchValues['intensivista'] = rh.intensivista ?? 0;
+            patchValues['internista'] = rh.internista ?? 0;
+            patchValues['cardiologo'] = rh.cardiologo ?? 0;
+            patchValues['traumatologo'] = rh.traumatologo ?? 0;
+            patchValues['otros_especialistas'] = rh.otros_especialistas ?? 0;
+          }
 
-            tipo: resp.data.tipo,
+          // Epidemiología
+          if (ep) {
+            patchValues['anho_epi'] = ep.anho_epi ?? new Date().getFullYear();
+            patchValues['semana_epi'] = ep.semana_epi ?? 1;
+            patchValues['casos_dengue'] = ep.casos_dengue ?? 0;
+            patchValues['casos_anemia'] = ep.casos_anemia ?? 0;
+            patchValues['mort_materna'] = ep.mort_materna ?? 0;
+            patchValues['casos_desnutricion'] = ep.casos_desnutricion ?? 0;
+            patchValues['iras_edas'] = ep.iras_edas ?? 0;
+            patchValues['mortalidad_neonatal'] = ep.mortalidad_neonatal ?? 0;
+          }
 
-            coord_lat: Number(resp.data.coord_lat),
+          // Servicios
+          if (sv) {
+            patchValues['emergencia'] = !!sv.emergencia;
+            patchValues['uci'] = !!sv.uci;
+            patchValues['centro_quirurgico'] = !!sv.centro_quirurgico;
+            patchValues['partos'] = !!sv.partos;
+            patchValues['consultas_diarias_prom'] = Number(sv.consultas_diarias_prom) || 0;
+            patchValues['camas_ocupadas'] = sv.camas_ocupadas ?? 0;
+          }
 
-            coord_long: Number(resp.data.coord_long),
+          // Condiciones Básicas
+          if (cb) {
+            patchValues['agua'] = !!cb.agua;
+            patchValues['desague'] = !!cb.desague;
+            patchValues['electricidad'] = !!cb.electricidad;
+            patchValues['oxigeno'] = !!cb.oxigeno;
+            patchValues['internet'] = !!cb.internet;
+          }
 
-            poblacion_asignada: resp.data.poblacion_asignada,
-          });
+          // Proyecto de Inversión
+          if (pr) {
+            patchValues['id_proyecto'] = pr.id_proyecto ?? 0;
+            patchValues['estado_inversion'] = pr.estado_inversion || '';
+            patchValues['avance_fisico'] = Number(pr.avance_fisico) || 0;
+            patchValues['avance_financiero'] = Number(pr.avance_financiero) || 0;
+            patchValues['monto_total'] = Number(pr.monto_total) || 0;
+            patchValues['monto_devengado'] = Number(pr.monto_devengado) || 0;
+            patchValues['unidad_ejecutora'] = pr.unidad_ejecutora || '';
+          }
+
+          this.form.patchValue(patchValues);
         },
 
         error: (err) => {
@@ -339,10 +425,56 @@ export class Salud {
     }
   }
 
+  private validarCamposObligatorios(): { valido: boolean; camposFaltantes: string[] } {
+    const camposFaltantes: string[] = [];
+
+    // Validar Establecimientos - TODOS deben estar llenos
+    const camposEstablecimiento = [
+      'id_renaes',
+      'nombre_eess',
+      'categoria',
+      'red_salud',
+      'provincia',
+      'distrito',
+      'tipo',
+    ];
+    for (const campo of camposEstablecimiento) {
+      const control = this.form.get(campo);
+      const value = control?.value;
+      if (!value || (typeof value === 'string' && value.trim() === '')) {
+        camposFaltantes.push(campo);
+        control?.markAsTouched();
+        control?.setErrors({ required: true });
+      }
+    }
+
+    // Validar Gestión de Inversiones - estado_inversion debe tener selección
+    const estInversion = this.form.get('estado_inversion');
+    if (!estInversion?.value || estInversion.value.trim() === '') {
+      camposFaltantes.push('estado_inversion');
+      estInversion?.markAsTouched();
+      estInversion?.setErrors({ required: true });
+    }
+
+    // Validar fecha_corte
+    const fechaCorte = this.form.get('fecha_corte');
+    if (!fechaCorte?.value || fechaCorte.value.trim() === '') {
+      camposFaltantes.push('fecha_corte');
+      fechaCorte?.markAsTouched();
+      fechaCorte?.setErrors({ required: true });
+    }
+
+    return {
+      valido: camposFaltantes.length === 0,
+      camposFaltantes,
+    };
+  }
+
   guardarReporte(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      this.mensajeGuardado = 'Complete los campos obligatorios antes de guardar.';
+    const validacion = this.validarCamposObligatorios();
+
+    if (!validacion.valido) {
+      this.mensajeGuardado = 'Falta completar campos';
       return;
     }
 
@@ -541,9 +673,9 @@ export class Salud {
 
       camas_hospitalarias: 0,
 
-      equipo_rayos_x: false,
+      equipo_rayos_x: '',
 
-      planta_oxigeno: false,
+      planta_oxigeno: '',
 
       estado_infra: 1,
 
@@ -563,7 +695,7 @@ export class Salud {
 
       med_exist: 0,
 
-      turno_24h: false,
+      turno_24h: '',
 
       enfermeras: 0,
 

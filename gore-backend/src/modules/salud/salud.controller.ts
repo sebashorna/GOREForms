@@ -110,6 +110,40 @@ class SaludController {
         }
 
     }
+
+    async obtenerCompleto(req: Request, res: Response) {
+        try {
+
+            const id = Number(req.params.id);
+
+            if (isNaN(id)) {
+                return fail(res, "El id_renaes debe ser un número.", 400);
+            }
+
+            const reporte = await service.obtenerReporteCompleto(id);
+
+            if (!reporte.establecimiento) {
+                return fail(res, "Establecimiento no encontrado.", 404);
+            }
+
+            return success(
+                res,
+                reporte,
+                "Reporte completo obtenido correctamente."
+            );
+
+        } catch (error) {
+
+            console.error(error);
+
+            return fail(
+                res,
+                "No fue posible obtener el reporte completo."
+            );
+
+        }
+
+    }
 }
 
 export default new SaludController();

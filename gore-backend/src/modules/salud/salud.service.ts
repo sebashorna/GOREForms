@@ -16,6 +16,10 @@ class SaludService {
         return repository.findById(idRenaes);
 
     }
+
+    async obtenerReporteCompleto(idRenaes: number) {
+        return repository.findUltimoReporteCompleto(idRenaes);
+    }
 }
 
 export default new SaludService();

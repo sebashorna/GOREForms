@@ -20,6 +20,60 @@ class SaludRepository {
         });
     }
 
+    async findUltimoReporteCompleto(idRenaes: number) {
+        const [
+            establecimiento,
+            equipamiento,
+            recursosHumanos,
+            epidemiologia,
+            servicios,
+            condiciones,
+            proyecto,
+        ] = await Promise.all([
+            prisma.establecimientos.findUnique({ where: { id_renaes: idRenaes } }),
+
+            prisma.equipamiento_estado.findFirst({
+                where: { id_renaes: idRenaes },
+                orderBy: { fecha_corte: 'desc' },
+            }),
+
+            prisma.recursos_humanos.findFirst({
+                where: { id_renaes: idRenaes },
+                orderBy: { fecha_corte: 'desc' },
+            }),
+
+            prisma.epidemiologia.findFirst({
+                where: { id_renaes: idRenaes },
+                orderBy: { fecha_corte: 'desc' },
+            }),
+
+            prisma.servicios.findFirst({
+                where: { id_renaes: idRenaes },
+                orderBy: { fecha_corte: 'desc' },
+            }),
+
+            prisma.condiciones_basicas.findFirst({
+                where: { id_renaes: idRenaes },
+                orderBy: { fecha_corte: 'desc' },
+            }),
+
+            prisma.proyectos_inversion.findFirst({
+                where: { id_renaes: idRenaes },
+                orderBy: { fecha_corte: 'desc' },
+            }),
+        ]);
+
+        return {
+            establecimiento,
+            equipamiento,
+            recursos_humanos: recursosHumanos,
+            epidemiologia,
+            servicios,
+            condiciones_basicas: condiciones,
+            proyecto,
+        };
+    }
+
     async create(dto: CrearSaludDTO) {
 
         return prisma.$transaction(async (tx) => {
@@ -74,7 +128,7 @@ class SaludRepository {
                 tipo: dto.tipo,
                 provincia: dto.provincia,
                 distrito: dto.distrito,
-                fecha_modificacion: new Date(),
+                fecha_modificacion_salud: new Date(),
             },
             update: {
                 nombre_eess: dto.nombre_eess,
@@ -87,7 +141,7 @@ class SaludRepository {
                 tipo: dto.tipo,
                 provincia: dto.provincia,
                 distrito: dto.distrito,
-                fecha_modificacion: new Date(),
+                fecha_modificacion_salud: new Date(),
             },
         });
 

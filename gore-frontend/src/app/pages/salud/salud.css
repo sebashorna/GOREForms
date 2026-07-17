@@ -8,6 +8,71 @@
   overflow-y: auto;
 }
 
+.btn-limpiar{
+    background:#fff;
+    color:#7A1C1C;
+    border:2px solid #7A1C1C;
+
+    padding:10px 24px;
+    border-radius:10px;
+    font-weight:600;
+
+    transition:.25s;
+}
+
+.btn-limpiar:hover{
+    background:#7A1C1C;
+    color:#fff;
+}
+
+/* ===========================
+   BOTÓN GUARDAR
+=========================== */
+
+.btn-guardar{
+    background:#198754;
+    color:#fff;
+    border:none;
+
+    padding:10px 28px;
+    border-radius:10px;
+
+    font-weight:600;
+
+    transition:all .25s ease;
+
+    box-shadow:0 4px 12px rgba(25,135,84,.25);
+}
+
+.btn-guardar:hover:not(:disabled){
+    background:#157347;
+    color:#fff;
+
+    transform:translateY(-2px);
+
+    box-shadow:0 8px 18px rgba(25,135,84,.35);
+}
+
+.btn-guardar:active:not(:disabled){
+    transform:scale(.98);
+}
+
+/* Estado deshabilitado */
+.btn-guardar:disabled{
+
+    background:#c7c7c7;
+    color:#6c757d;
+
+    cursor:not-allowed;
+
+    box-shadow:none;
+
+    opacity:1;
+
+    transform:none;
+
+}
+
 .form-container {
   background: #ffffff;
   border-radius: 12px;
@@ -45,10 +110,30 @@
   background-color: #fff1f1;
   color: #7a1c1c;
   font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
 }
 
 .message:empty {
   display: none;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #7a1c1c;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.close-btn:hover {
+  opacity: 1;
 }
 
 .field-message {
@@ -100,6 +185,13 @@
   background-color: #f8f9fa;
   color: #6c757d;
   cursor: not-allowed;
+}
+
+.form-group input.ng-invalid.ng-touched, 
+.form-group select.ng-invalid.ng-touched {
+  border-color: #dc3545;
+  background-color: #fff5f5;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
 }
 
 .full-width {

@@ -16,6 +16,10 @@ export class SaludService {
     return this.http.get<any>(`${this.api}/${id}`);
   }
 
+  obtenerReporteCompleto(id: number): Observable<any> {
+    return this.http.get<any>(`${this.api}/${id}/completo`);
+  }
+
   guardarReporteSalud(dto: CrearSaludDTO): Observable<any> {
 
     return this.http.post<any>(
