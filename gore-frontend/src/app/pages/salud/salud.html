@@ -67,12 +67,12 @@
 
             <div class="form-group">
                 <label for="coor_latitud">Latitud</label>
-                <input type="text" id="coor_lat" formControlName="coor_lat" />
+                <input type="text" id="coor_lat" formControlName="coord_lat" />
             </div>
 
             <div class="form-group">
                 <label for="coor_longitud">Longitud</label>
-                <input type="text" id="coor_long" formControlName="coor_long" />
+                <input type="text" id="coor_long" formControlName="coord_long" />
             </div>
         </div>
     </div>
@@ -144,6 +144,9 @@
             <div class="form-group">
                 <label for="Disponibles">Camas UCI Disponibles</label>
                 <input type="number" id="camas_uci_disp" formControlName="camas_uci_disp" />
+                <div class="field-message" *ngIf="form.get('camas_uci_disp')?.hasError('maxExceeded') && form.get('camas_uci_disp')?.touched">
+                    Las camas UCI disponibles no pueden ser mayores a las camas totales.
+                </div>
             </div>
 
             <div class="form-group">
@@ -198,6 +201,9 @@
             <div class="form-group">
                 <label for="Servicio">Médicos en Servicio (Hoy)</label>
                 <input type="number" id="med_exist" formControlName="med_exist" />
+                <div class="field-message" *ngIf="form.get('med_exist')?.hasError('maxExceeded') && form.get('med_exist')?.touched">
+                    Los médicos en servicio no pueden ser mayores a los médicos programados.
+                </div>
             </div>
 
             <div class="form-group full-width">
@@ -245,7 +251,10 @@
         <div class="form-grid">
             <div class="form-group full-width">
                 <label for="fechaCorte">Fecha de Corte de Información</label>
-                <input type="date" id="fecha_corte" formControlName="fecha_corte" />
+                <input type="date" id="fecha_corte" formControlName="fecha_corte" [attr.min]="minDate" />
+                <div class="field-message" *ngIf="form.get('fecha_corte')?.hasError('invalidDate') && form.get('fecha_corte')?.touched">
+                    La fecha de corte debe ser mayor al día de hoy.
+                </div>
             </div>
         </div>
     </div>

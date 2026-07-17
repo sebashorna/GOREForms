@@ -10,6 +10,7 @@ class SaludController {
 
         try {
 
+            console.log('POST /api/salud body:', JSON.stringify(req.body));
             const proyecto = await service.crear(req.body);
 
             return success(
@@ -21,7 +22,12 @@ class SaludController {
 
         } catch (err) {
 
-            console.error(err);
+            console.error('POST /api/salud error:', err);
+            if (err instanceof Error) {
+                console.error(err.stack);
+            } else {
+                console.error('Error details:', JSON.stringify(err, Object.getOwnPropertyNames(err)));
+            }
 
             return fail(
                 res,

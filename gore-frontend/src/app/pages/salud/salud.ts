@@ -19,6 +19,8 @@ export class Salud {
   mensajeGuardado = '';
   idRenaesMensaje = '';
 
+  minDate = this.getTodayString();
+
   form = this.fb.group({
     //==============================
     // INFORMACIÓN GENERAL
@@ -183,6 +185,88 @@ export class Salud {
     fecha_corte: ['', Validators.required],
   });
 
+  // initialize reactive cross-field validations
+  private _init = this.setupValidators();
+
+  private setupValidators(): void {
+    // camas UCI: disponibles <= totales
+    this.form.get('camas_uci_tot')?.valueChanges.subscribe(() => this.checkCamas());
+    this.form.get('camas_uci_disp')?.valueChanges.subscribe(() => this.checkCamas());
+
+    // médicos en servicio <= médicos programados
+    this.form.get('med_prog')?.valueChanges.subscribe(() => this.checkMedicos());
+    this.form.get('med_exist')?.valueChanges.subscribe(() => this.checkMedicos());
+
+    // fecha debe ser mayor a hoy
+    this.form.get('fecha_corte')?.valueChanges.subscribe(() => this.checkFecha());
+  }
+
+  private checkCamas(): void {
+    const tot = Number(this.form.get('camas_uci_tot')?.value) || 0;
+    const disp = Number(this.form.get('camas_uci_disp')?.value) || 0;
+    const control = this.form.get('camas_uci_disp');
+    if (disp > tot) {
+      control?.setErrors({ maxExceeded: true });
+    } else {
+      // remove specific error while preserving others
+      if (control?.hasError('maxExceeded')) {
+        control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+        const errors = control.errors;
+        if (errors) {
+          delete errors['maxExceeded'];
+          if (Object.keys(errors).length === 0) control.setErrors(null);
+          else control.setErrors(errors);
+        }
+      }
+    }
+  }
+
+  private checkMedicos(): void {
+    const prog = Number(this.form.get('med_prog')?.value) || 0;
+    const exist = Number(this.form.get('med_exist')?.value) || 0;
+    const control = this.form.get('med_exist');
+    if (exist > prog) {
+      control?.setErrors({ maxExceeded: true });
+    } else {
+      if (control?.hasError('maxExceeded')) {
+        control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+        const errors = control.errors;
+        if (errors) {
+          delete errors['maxExceeded'];
+          if (Object.keys(errors).length === 0) control.setErrors(null);
+          else control.setErrors(errors);
+        }
+      }
+    }
+  }
+
+  private checkFecha(): void {
+    const raw = this.form.get('fecha_corte')?.value;
+    const parsed = this.parseDate(raw);
+    const control = this.form.get('fecha_corte');
+    if (!parsed) {
+      control?.setErrors({ invalidDate: true });
+      return;
+    }
+    const today = new Date();
+    // zero time for comparison
+    today.setHours(0, 0, 0, 0);
+    const d = new Date(parsed.getFullYear(), parsed.getMonth(), parsed.getDate());
+    if (d <= today) {
+      control?.setErrors({ invalidDate: true });
+    } else {
+      if (control?.hasError('invalidDate')) {
+        control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+        const errors = control.errors;
+        if (errors) {
+          delete errors['invalidDate'];
+          if (Object.keys(errors).length === 0) control.setErrors(null);
+          else control.setErrors(errors);
+        }
+      }
+    }
+  }
+
   buscarEstablecimiento(): void {
     this.idRenaesMensaje = '';
     const id = Number(this.form.get('id_renaes')?.value);
@@ -339,6 +423,9 @@ export class Salud {
     this.saludService.guardarReporteSalud(dto).subscribe({
       next: (resp) => {
         this.mensajeGuardado = 'Reporte registrado correctamente.';
+        setTimeout(() => {
+          this.mensajeGuardado = '';
+        }, 5000);
         this.limpiarFormulario();
       },
       error: (err) => {
@@ -383,6 +470,14 @@ export class Salud {
     }
     const dt = new Date(s);
     return isNaN(dt.getTime()) ? null : dt;
+  }
+
+  private getTodayString(): string {
+    const d = new Date();
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
   }
 
   private limpiarDatosEstablecimiento(): void {

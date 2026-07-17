@@ -74,6 +74,7 @@ class SaludRepository {
                 tipo: dto.tipo,
                 provincia: dto.provincia,
                 distrito: dto.distrito,
+                fecha_modificacion: new Date(),
             },
             update: {
                 nombre_eess: dto.nombre_eess,
@@ -86,6 +87,7 @@ class SaludRepository {
                 tipo: dto.tipo,
                 provincia: dto.provincia,
                 distrito: dto.distrito,
+                fecha_modificacion: new Date(),
             },
         });
 
@@ -241,33 +243,29 @@ class SaludRepository {
 
     ) {
 
-        // eliminar servicios previos para evitar conflictos de PK/unique
-        await tx.servicios.deleteMany({ where: { id_renaes: dto.id_renaes, fecha_corte: dto.fecha_corte } });
-
-        await tx.servicios.create({
-
-            data: {
-
+        await tx.servicios.upsert({
+            where: { id_servicios: dto.id_renaes },
+            create: {
                 id_servicios: dto.id_renaes,
-
                 id_renaes: dto.id_renaes,
-
                 emergencia: dto.emergencia,
-
                 uci: dto.uci,
-
                 centro_quirurgico: dto.centro_quirurgico,
-
                 partos: dto.partos,
-
                 consultas_diarias_prom: dto.consultas_diarias_prom,
-
                 camas_ocupadas: dto.camas_ocupadas,
-
-                fecha_corte: dto.fecha_corte
-
-            }
-
+                fecha_corte: dto.fecha_corte,
+            },
+            update: {
+                id_renaes: dto.id_renaes,
+                emergencia: dto.emergencia,
+                uci: dto.uci,
+                centro_quirurgico: dto.centro_quirurgico,
+                partos: dto.partos,
+                consultas_diarias_prom: dto.consultas_diarias_prom,
+                camas_ocupadas: dto.camas_ocupadas,
+                fecha_corte: dto.fecha_corte,
+            },
         });
 
     }
@@ -280,31 +278,27 @@ class SaludRepository {
 
     ) {
 
-        // eliminar condiciones previas para la misma fecha e id
-        await tx.condiciones_basicas.deleteMany({ where: { id_renaes: dto.id_renaes, fecha_corte: dto.fecha_corte } });
-
-        await tx.condiciones_basicas.create({
-
-            data: {
-
+        await tx.condiciones_basicas.upsert({
+            where: { id_condiciones: dto.id_renaes },
+            create: {
                 id_condiciones: dto.id_renaes,
-
                 id_renaes: dto.id_renaes,
-
                 agua: dto.agua,
-
                 desague: dto.desague,
-
                 electricidad: dto.electricidad,
-
                 oxigeno: dto.oxigeno,
-
                 internet: dto.internet,
-
-                fecha_corte: dto.fecha_corte
-
-            }
-
+                fecha_corte: dto.fecha_corte,
+            },
+            update: {
+                id_renaes: dto.id_renaes,
+                agua: dto.agua,
+                desague: dto.desague,
+                electricidad: dto.electricidad,
+                oxigeno: dto.oxigeno,
+                internet: dto.internet,
+                fecha_corte: dto.fecha_corte,
+            },
         });
 
     }
