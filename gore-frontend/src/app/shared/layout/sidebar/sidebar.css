@@ -8,9 +8,19 @@
 
     flex-direction:column;
 
-    justify-content:space-between;
-
     box-shadow:3px 0 10px rgba(0,0,0,.08);
+
+    position:fixed;
+
+    top:75px;
+
+    left:0;
+
+    bottom:0;
+
+    overflow-y:auto;
+
+    z-index:999;
 
 }
 
