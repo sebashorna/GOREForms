@@ -201,14 +201,14 @@ class EducacionRepository {
         tx: Prisma.TransactionClient,
         dto: CrearEducacionDTO
     ) {
+        const historialData: any = {
+            cod_modular: dto.cod_modular,
+            tipo: "educacion",
+            fecha_modificacion_historial: new Date(),
+        };
+        
         await tx.historial.create({
-            data: {
-                id_renaes: null,
-                cod_modular: dto.cod_modular,
-                tipo: "educacion",
-                fecha_modificacion_historial: new Date(),
-                id_usuario: 1, // temporal, se reemplazará con el usuario autenticado
-            }
+            data: historialData
         });
     }
 

@@ -12,21 +12,12 @@ class HistorialRepository {
 
         const where: any = {};
 
-        // Conserva la consulta de registros previos a la columna tipo.
+        // Filtro por tipo
         if (filtros.tipo === 'salud') {
-            where.OR = [
-                { tipo: 'salud' },
-                { tipo: null, id_renaes: { not: 0 } },
-            ];
+            where.tipo = 'salud';
         } else if (filtros.tipo === 'educacion') {
-            where.OR = [
-                { tipo: 'educacion' },
-                { tipo: null, cod_modular: { not: 0 } },
-            ];
+            where.tipo = 'educacion';
         }
-
-        // Búsqueda por nombre se hace después de obtener los datos
-        // porque depende de las relaciones
 
         // Filtro por fecha
         if (filtros.fecha_desde || filtros.fecha_hasta) {
@@ -67,13 +58,12 @@ class HistorialRepository {
         });
 
         // Transformar los resultados
-        let resultados = registros.map(r => {
-            const esSalud = r.tipo === 'salud' || (r.tipo === null && r.id_renaes !== null && r.id_renaes !== 0);
-            const nombre = esSalud
+        const resultados = registros.map(r => {
+            const nombre = r.tipo === 'salud'
                 ? r.establecimientos?.nombre_eess
                 : r.instituciones_educativas?.nombre_ie;
 
-            const tipo = esSalud ? 'Salud' : 'Educación';
+            const tipo = r.tipo === 'salud' ? 'Salud' : 'Educación';
 
             return {
                 id_historial: r.id_historial,
@@ -87,7 +77,7 @@ class HistorialRepository {
         // Filtro de búsqueda por nombre (post-query porque viene de relaciones)
         if (filtros.busqueda) {
             const term = filtros.busqueda.toLowerCase();
-            resultados = resultados.filter(r =>
+            return resultados.filter(r =>
                 r.nombre.toLowerCase().includes(term)
             );
         }

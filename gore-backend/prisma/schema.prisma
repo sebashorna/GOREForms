@@ -330,11 +330,11 @@ model historial {
   id_renaes                    Int?
   cod_modular                  Int?
   fecha_modificacion_historial DateTime?                 @default(now()) @db.Timestamp(6)
-  id_usuario                   Int
+  id_usuario                   Int?
   tipo                         String?                   @db.VarChar(10)
   instituciones_educativas     instituciones_educativas? @relation(fields: [cod_modular], references: [cod_modular], onDelete: Restrict, map: "fk_cod_modular")
   establecimientos             establecimientos?         @relation(fields: [id_renaes], references: [id_renaes], onDelete: Cascade, map: "fk_historial_establecimientos")
-  usuarios                     usuarios                  @relation(fields: [id_usuario], references: [id_usuario], map: "fk_historial_usuarios")
+  usuarios                     usuarios?                 @relation(fields: [id_usuario], references: [id_usuario], map: "fk_historial_usuarios")
 
   @@schema("public")
 }
