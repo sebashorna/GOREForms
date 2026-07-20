@@ -74,6 +74,8 @@ class EducacionRepository {
 
             await this.guardarCondiciones(tx, dto);
 
+            await this.guardarHistorial(tx, dto);
+
             return {
                 success: true,
                 message: "Reporte registrado correctamente."
@@ -193,6 +195,20 @@ class EducacionRepository {
             }
         });
 
+    }
+
+    private async guardarHistorial(
+        tx: Prisma.TransactionClient,
+        dto: CrearEducacionDTO
+    ) {
+        await tx.historial.create({
+            data: {
+                id_renaes: 0,
+                cod_modular: dto.cod_modular,
+                fecha_modificacion_historial: new Date(),
+                id_usuario: 1, // temporal, se reemplazará con el usuario autenticado
+            }
+        });
     }
 
     private async guardarCondiciones(

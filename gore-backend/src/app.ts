@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 import dashboardRoutes from "./modules/dashboard/dashboard.routes";
 import saludRoutes from "./modules/salud/salud.routes";
 import educacionRoutes from "./modules/educacion/educacion.routes";
+import historialRoutes from "./modules/historial/historial.routes";
 
 const app = express();
 
@@ -44,6 +45,7 @@ app.get("/", (_, res) => {
 
 app.use("/api/salud", saludRoutes);
 app.use("/api/educacion", educacionRoutes);
+app.use("/api/historial", historialRoutes);
 
 //app.use("/api/seguimiento", seguimientoRoutes);
 

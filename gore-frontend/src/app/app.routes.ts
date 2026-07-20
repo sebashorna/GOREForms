@@ -5,6 +5,7 @@ import { Dashboard } from './pages/dashboard/dashboard';
 import { MainLayout } from './shared/layout/main-layout/main-layout';
 import { Salud } from './pages/salud/salud';
 import { Educacion } from './pages/educacion/educacion';
+import { Historial } from './pages/historial/historial';
 
 export const routes: Routes = [
 
@@ -38,6 +39,10 @@ export const routes: Routes = [
       {
          path: 'educacion',
          component: Educacion
+      },
+      {
+         path: 'historial',
+         component: Historial
       },
 
     ]

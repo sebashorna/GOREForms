@@ -1,0 +1,85 @@
+<div class="page-title">
+    <h1>📜 Historial de Modificaciones</h1>
+</div>
+
+<div class="filtros-container">
+    <div class="filtros-grid">
+        <div class="form-group">
+            <label for="filtroTipo">Tipo</label>
+            <select id="filtroTipo" [(ngModel)]="filtros.tipo">
+                <option value="">Todos</option>
+                <option value="salud">Salud</option>
+                <option value="educacion">Educación</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="filtroBusqueda">Buscar por nombre</label>
+            <input type="text" id="filtroBusqueda" [(ngModel)]="filtros.busqueda" placeholder="Nombre del establecimiento o IE" />
+        </div>
+
+        <div class="form-group">
+            <label for="filtroFechaDesde">Fecha desde</label>
+            <input type="date" id="filtroFechaDesde" [(ngModel)]="filtros.fecha_desde" />
+        </div>
+
+        <div class="form-group">
+            <label for="filtroFechaHasta">Fecha hasta</label>
+            <input type="date" id="filtroFechaHasta" [(ngModel)]="filtros.fecha_hasta" />
+        </div>
+
+        <div class="form-group">
+            <label for="filtroUsuario">Usuario</label>
+            <input type="text" id="filtroUsuario" [(ngModel)]="filtros.usuario" placeholder="Nombre de usuario" />
+        </div>
+
+        <div class="form-group filtros-actions">
+            <label>&nbsp;</label>
+            <div class="btn-group">
+                <button type="button" class="btn btn-buscar" (click)="buscar()">
+                    🔍 Buscar
+                </button>
+                <button type="button" class="btn btn-limpiar-filtros" (click)="limpiarFiltros()">
+                    ✕ Limpiar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="message" *ngIf="mensaje">
+    <span>{{ mensaje }}</span>
+</div>
+
+<div class="table-container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Fecha de Modificación</th>
+                <th>Usuario</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (item of historial; track item.id_historial) {
+                <tr>
+                    <td>{{ item.id_historial }}</td>
+                    <td>{{ item.nombre }}</td>
+                    <td>
+                        <span class="badge" [class.badge-salud]="item.tipo === 'Salud'" [class.badge-educacion]="item.tipo === 'Educación'">
+                            {{ item.tipo }}
+                        </span>
+                    </td>
+                    <td>{{ item.fecha_modificacion | date:'dd/MM/yyyy HH:mm' }}</td>
+                    <td>{{ item.usuario }}</td>
+                </tr>
+            } @empty {
+                <tr>
+                    <td colspan="5" class="text-center">No se encontraron registros.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

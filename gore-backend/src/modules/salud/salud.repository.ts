@@ -92,6 +92,8 @@ class SaludRepository {
 
             await this.guardarCondiciones(tx, dto);
 
+            await this.guardarHistorial(tx, dto);
+
             return {
 
                 success: true,
@@ -355,6 +357,19 @@ class SaludRepository {
             },
         });
 
+    }
+    private async guardarHistorial(
+        tx: Prisma.TransactionClient,
+        dto: CrearSaludDTO
+    ) {
+        await tx.historial.create({
+            data: {
+                id_renaes: dto.id_renaes,
+                cod_modular: 0,
+                fecha_modificacion_historial: new Date(),
+                id_usuario: 1, // temporal, se reemplazará con el usuario autenticado
+            }
+        });
     }
 
     private async guardarEpidemiologia(
