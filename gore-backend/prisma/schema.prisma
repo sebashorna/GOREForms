@@ -85,6 +85,7 @@ model usuarios {
   bloqueado_hasta   DateTime?   @db.Timestamp(6)
   ultimo_login      DateTime?   @db.Timestamp(6)
   creado            DateTime?   @default(now()) @db.Timestamp(6)
+  rol               String?     @db.VarChar(20)
   historial         historial[]
   login_2fa         login_2fa[]
   sesiones          sesiones[]
@@ -325,14 +326,15 @@ model educacion_gore_recursos_humanos {
 }
 
 model historial {
-  id_historial                 Int                      @id @default(autoincrement())
-  id_renaes                    Int
-  cod_modular                  Int
-  fecha_modificacion_historial DateTime?                @default(now()) @db.Timestamp(6)
+  id_historial                 Int                       @id @default(autoincrement())
+  id_renaes                    Int?
+  cod_modular                  Int?
+  fecha_modificacion_historial DateTime?                 @default(now()) @db.Timestamp(6)
   id_usuario                   Int
-  instituciones_educativas     instituciones_educativas @relation(fields: [cod_modular], references: [cod_modular], map: "fk_cod_modular")
-  establecimientos             establecimientos         @relation(fields: [id_renaes], references: [id_renaes], onDelete: Cascade, map: "fk_historial_establecimientos")
-  usuarios                     usuarios                 @relation(fields: [id_usuario], references: [id_usuario], map: "fk_historial_usuarios")
+  tipo                         String?                   @db.VarChar(10)
+  instituciones_educativas     instituciones_educativas? @relation(fields: [cod_modular], references: [cod_modular], onDelete: Restrict, map: "fk_cod_modular")
+  establecimientos             establecimientos?         @relation(fields: [id_renaes], references: [id_renaes], onDelete: Cascade, map: "fk_historial_establecimientos")
+  usuarios                     usuarios                  @relation(fields: [id_usuario], references: [id_usuario], map: "fk_historial_usuarios")
 
   @@schema("public")
 }

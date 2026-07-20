@@ -12,12 +12,17 @@ class HistorialRepository {
 
         const where: any = {};
 
-        // Filtro por tipo: si es "salud" solo trae los que tienen id_renaes != 0
-        // si es "educacion" solo trae los que tienen cod_modular != 0
+        // Conserva la consulta de registros previos a la columna tipo.
         if (filtros.tipo === 'salud') {
-            where.id_renaes = { not: 0 };
+            where.OR = [
+                { tipo: 'salud' },
+                { tipo: null, id_renaes: { not: 0 } },
+            ];
         } else if (filtros.tipo === 'educacion') {
-            where.cod_modular = { not: 0 };
+            where.OR = [
+                { tipo: 'educacion' },
+                { tipo: null, cod_modular: { not: 0 } },
+            ];
         }
 
         // Búsqueda por nombre se hace después de obtener los datos
@@ -63,11 +68,12 @@ class HistorialRepository {
 
         // Transformar los resultados
         let resultados = registros.map(r => {
-            const nombre = r.id_renaes !== 0
+            const esSalud = r.tipo === 'salud' || (r.tipo === null && r.id_renaes !== null && r.id_renaes !== 0);
+            const nombre = esSalud
                 ? r.establecimientos?.nombre_eess
                 : r.instituciones_educativas?.nombre_ie;
 
-            const tipo = r.id_renaes !== 0 ? 'Salud' : 'Educación';
+            const tipo = esSalud ? 'Salud' : 'Educación';
 
             return {
                 id_historial: r.id_historial,

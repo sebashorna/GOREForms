@@ -365,7 +365,8 @@ class SaludRepository {
         await tx.historial.create({
             data: {
                 id_renaes: dto.id_renaes,
-                cod_modular: 0,
+                cod_modular: null,
+                tipo: "salud",
                 fecha_modificacion_historial: new Date(),
                 id_usuario: 1, // temporal, se reemplazará con el usuario autenticado
             }
