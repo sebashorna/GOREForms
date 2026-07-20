@@ -38,6 +38,6 @@ html, body{
 
     color:var(--text);
 
-    overflow-y:hidden;
+    height: 100%;
 
 }
