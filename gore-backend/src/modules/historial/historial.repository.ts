@@ -32,26 +32,16 @@ class HistorialRepository {
             }
         }
 
-        // Filtro por usuario
+        // Filtro por usuario (busca en nombre_usuario)
         if (filtros.usuario) {
-            where.usuarios = {
-                usuario: { contains: filtros.usuario, mode: 'insensitive' }
+            where.nombre_usuario = {
+                contains: filtros.usuario,
+                mode: 'insensitive'
             };
         }
 
         const registros = await prisma.historial.findMany({
             where,
-            include: {
-                establecimientos: {
-                    select: { nombre_eess: true }
-                },
-                instituciones_educativas: {
-                    select: { nombre_ie: true }
-                },
-                usuarios: {
-                    select: { usuario: true }
-                }
-            },
             orderBy: {
                 fecha_modificacion_historial: 'desc'
             }
@@ -59,22 +49,19 @@ class HistorialRepository {
 
         // Transformar los resultados
         const resultados = registros.map(r => {
-            const nombre = r.tipo === 'salud'
-                ? r.establecimientos?.nombre_eess
-                : r.instituciones_educativas?.nombre_ie;
-
+            const nombre = r.referencia || '—';
             const tipo = r.tipo === 'salud' ? 'Salud' : 'Educación';
 
             return {
                 id_historial: r.id_historial,
-                nombre: nombre || '—',
+                nombre: nombre,
                 tipo,
                 fecha_modificacion: r.fecha_modificacion_historial,
-                usuario: r.usuarios?.usuario || '—'
+                usuario: r.nombre_usuario || '—'
             };
         });
 
-        // Filtro de búsqueda por nombre (post-query porque viene de relaciones)
+        // Filtro de búsqueda por nombre
         if (filtros.busqueda) {
             const term = filtros.busqueda.toLowerCase();
             return resultados.filter(r =>

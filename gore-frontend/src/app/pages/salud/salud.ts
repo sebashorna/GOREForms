@@ -3,6 +3,7 @@ import { NgIf } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { SaludService } from '../../services/salud';
+import { AuthService } from '../../services/auth.service';
 import { CrearSaludDTO } from '../../models/crear-salud.dto';
 
 @Component({
@@ -15,6 +16,7 @@ import { CrearSaludDTO } from '../../models/crear-salud.dto';
 export class Salud {
   private fb = inject(FormBuilder);
   private saludService = inject(SaludService);
+  private authService = inject(AuthService);
 
   mensajeGuardado = '';
   idRenaesMensaje = '';
@@ -548,6 +550,7 @@ export class Salud {
       oxigeno: this.parseBoolean(rawValues.oxigeno),
       internet: this.parseBoolean(rawValues.internet),
       fecha_corte: fechaCorte,
+      nombre_usuario: this.authService.obtenerUsuario()?.usuario || '',
     };
 
     this.mensajeGuardado = '';

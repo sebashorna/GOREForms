@@ -3,6 +3,7 @@ import { NgIf } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { EducacionService } from '../../services/educacion';
+import { AuthService } from '../../services/auth.service';
 import { CrearEducacionDTO } from '../../models/crear-educacion.dto';
 
 @Component({
@@ -15,6 +16,7 @@ import { CrearEducacionDTO } from '../../models/crear-educacion.dto';
 export class Educacion {
   private fb = inject(FormBuilder);
   private educacionService = inject(EducacionService);
+  private authService = inject(AuthService);
 
   mensajeGuardado = '';
   codModularMensaje = '';
@@ -349,6 +351,7 @@ export class Educacion {
       personal_admin: Number(rawValues.personal_admin),
       tiene_psicologo: rawValues.tiene_psicologo || 'NO',
       fecha_corte: fechaCorte,
+      nombre_usuario: this.authService.obtenerUsuario()?.usuario || '',
     };
 
     this.mensajeGuardado = '';

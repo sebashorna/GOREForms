@@ -130,4 +130,6 @@ export interface CrearSaludDTO {
 
   fecha_corte: Date;
 
+  nombre_usuario: string;
+
 }

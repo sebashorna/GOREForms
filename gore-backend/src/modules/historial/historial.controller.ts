@@ -46,11 +46,12 @@ class HistorialController {
 
         } catch (error) {
 
-            console.error(error);
+            console.error('Error al obtener historial:', error);
 
             return fail(
                 res,
-                "No fue posible obtener el historial."
+                "No fue posible obtener el historial.",
+                500
             );
 
         }
