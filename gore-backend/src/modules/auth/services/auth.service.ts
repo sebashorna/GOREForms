@@ -37,8 +37,9 @@ class AuthService {
         // Resetear intentos
         await repository.resetearIntentos(usuario.id_usuario);
 
-        // Verificar si requiere 2FA
-        const requiere2FA = usuario.rol === 'ADMIN' || usuario.rol === 'SALUD';
+        // 2FA desactivado temporalmente para capturas
+        const requiere2FA = false;
+        // const requiere2FA = usuario.rol === 'ADMIN' || usuario.rol === 'SALUD';
 
         if (requiere2FA) {
             // Generar código 2FA

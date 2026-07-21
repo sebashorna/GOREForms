@@ -11,7 +11,8 @@ class SaludController {
         try {
 
             console.log('POST /api/salud body:', JSON.stringify(req.body));
-            const proyecto = await service.crear(req.body);
+            const usuarioId = (req as any).usuario?.id_usuario;
+            const proyecto = await service.crear({ ...req.body, id_usuario: usuarioId });
 
             return success(
                 res,
@@ -29,9 +30,12 @@ class SaludController {
                 console.error('Error details:', JSON.stringify(err, Object.getOwnPropertyNames(err)));
             }
 
+            const errorMessage = err instanceof Error ? err.message : "No fue posible registrar el formulario.";
+
             return fail(
                 res,
-                "No fue posible registrar el formulario."
+                `Error: ${errorMessage}`,
+                500
             );
 
         }

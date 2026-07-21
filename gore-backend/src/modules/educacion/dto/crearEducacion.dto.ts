@@ -1,83 +1,83 @@
 export interface CrearEducacionDTO {
 
     // ============================
-    // Información General
+    // Identificación de la I.E.
     // ============================
 
     cod_modular: number;
 
     nombre_ie: string;
 
+    dre: string;
+
+    ugel: string;
+
     nivel: string;
+
+    gestion: string;
 
     provincia: string;
 
     distrito: string;
 
-    coord_lat: number;
-
-    coord_long: number;
-
-    total_estudiantes: number;
+    centro_poblado?: string;
 
     // ============================
-    // Proyectos
+    // Proyectos de Inversión
     // ============================
 
-    id_proyecto: number;
+    cui_proyecto?: string;
 
     estado_proyecto: string;
 
-    tipo_obra: string;
-
-    unidad_ejecutora: string;
-
     avance_fisico: number;
-
-    avance_financiero: number;
 
     monto_total: number;
 
-    monto_devengado: number;
+    // ============================
+    // Infraestructura y Equipamiento
+    // ============================
 
-    // ============================
-    // Equipamiento
-    // ============================
+    estado_infra: number;
+
+    aulas_buenas: number;
 
     mobiliario_optimo_porc: number;
 
     computadoras_total: number;
 
-    tiene_internet: boolean;
-
-    tiene_laboratorio: boolean;
-
-    // ============================
-    // Recursos Humanos
-    // ============================
-
-    docentes_requeridos: number;
-
-    docentes_asignados: number;
-
-    personal_administrativo: number;
-
-    // ============================
-    // Condiciones Básicas
-    // ============================
-
     servicio_agua: boolean;
 
     servicio_desague: boolean;
 
-    servicio_electricidad: boolean;
+    servicio_luz: boolean;
 
-    estado_critico_infra: boolean;
+    tiene_internet: boolean;
+
+    riesgo_critico: boolean;
+
+    // ============================
+    // Personal Docente y Administrativo
+    // ============================
+
+    total_matricula: number;
+
+    docentes_requeridos: number;
+
+    docentes_nombrados: number;
+
+    docentes_contratados: number;
+
+    personal_admin: number;
+
+    tiene_psicologo: string;
 
     // ============================
     // Común
     // ============================
 
     fecha_corte: Date;
+
+    nombre_usuario: string;
 
 }

@@ -65,7 +65,7 @@ model seguimiento_proyectos {
 model sesiones {
   id           Int       @id @default(autoincrement())
   id_usuario   Int?
-  token        String?
+  token        String?   @db.Uuid
   fecha_inicio DateTime? @default(now()) @db.Timestamp(6)
   fecha_expira DateTime? @db.Timestamp(6)
   activo       Boolean?  @default(true)
@@ -86,7 +86,6 @@ model usuarios {
   ultimo_login      DateTime?   @db.Timestamp(6)
   creado            DateTime?   @default(now()) @db.Timestamp(6)
   rol               String?     @db.VarChar(20)
-  historial         historial[]
   login_2fa         login_2fa[]
   sesiones          sesiones[]
 
@@ -167,7 +166,6 @@ model establecimientos {
   distrito                 String?               @db.VarChar(250)
   provincia                String?               @db.VarChar(250)
   fecha_modificacion_salud DateTime?             @db.Timestamp(6)
-  historial                historial[]
   condiciones_basicas      condiciones_basicas[]
   epidemiologia            epidemiologia[]
   equipamiento_estado      equipamiento_estado[]
@@ -285,7 +283,6 @@ model instituciones_educativas {
   equipamiento                 equipamiento[]
   proyectos_infraestructura    proyectos_infraestructura[]
   recursos_humanos             educacion_gore_recursos_humanos[]
-  historial                    historial[]
 
   @@schema("educacion_gore")
 }
@@ -326,15 +323,11 @@ model educacion_gore_recursos_humanos {
 }
 
 model historial {
-  id_historial                 Int                       @id @default(autoincrement())
-  id_renaes                    Int?
-  cod_modular                  Int?
-  fecha_modificacion_historial DateTime?                 @default(now()) @db.Timestamp(6)
-  id_usuario                   Int?
-  tipo                         String?                   @db.VarChar(10)
-  instituciones_educativas     instituciones_educativas? @relation(fields: [cod_modular], references: [cod_modular], onDelete: Restrict, map: "fk_cod_modular")
-  establecimientos             establecimientos?         @relation(fields: [id_renaes], references: [id_renaes], onDelete: Cascade, map: "fk_historial_establecimientos")
-  usuarios                     usuarios?                 @relation(fields: [id_usuario], references: [id_usuario], map: "fk_historial_usuarios")
+  id_historial                 Int       @id @default(autoincrement())
+  fecha_modificacion_historial DateTime? @default(now()) @db.Timestamp(6)
+  tipo                         String?   @db.VarChar(10)
+  referencia                   String?   @db.VarChar(500)
+  nombre_usuario               String?   @db.VarChar(100)
 
   @@schema("public")
 }

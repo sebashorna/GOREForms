@@ -11,32 +11,53 @@
 
     <div class="form-container">
         <div class="section-header">
-            <h3>📋 Información General</h3>
+            <h3>📋 Identificación de la Institución Educativa</h3>
         </div>
         <div class="form-grid">
-            <div class="form-group full-width">
+            <div class="form-group">
                 <label for="cod_modular">Código Modular</label>
                 <input type="number" id="cod_modular" formControlName="cod_modular" (input)="handleIdInput()" (blur)="buscarInstitucion()" min="1" step="1" />
                 <div class="field-message warning" *ngIf="codModularMensaje">{{ codModularMensaje }}</div>
             </div>
 
-            <div class="form-group full-width">
-                <label for="nombre_ie">Nombre de la IE</label>
+            <div class="form-group">
+                <label for="nombre_ie">Nombre de la I.E.</label>
                 <input type="text" id="nombre_ie" formControlName="nombre_ie" />
             </div>
 
             <div class="form-group">
-                <label for="nivel">Nivel</label>
+                <label for="dre">DRE</label>
+                <input type="text" id="dre" formControlName="dre" value="LAMBAYEQUE" />
+            </div>
+
+            <div class="form-group">
+                <label for="ugel">UGEL</label>
+                <select id="ugel" formControlName="ugel">
+                    <option value="CHICLAYO">CHICLAYO</option>
+                    <option value="LAMBAYEQUE">LAMBAYEQUE</option>
+                    <option value="FERREÑAFE">FERREÑAFE</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="nivel">Nivel / Modalidad</label>
                 <select id="nivel" formControlName="nivel">
                     <option value="">Seleccione Nivel</option>
                     <option value="Inicial">Inicial</option>
                     <option value="Primaria">Primaria</option>
                     <option value="Secundaria">Secundaria</option>
-                    <option value="Inicial - Primaria">Inicial - Primaria</option>
-                    <option value="Primaria - Secundaria">Primaria - Secundaria</option>
-                    <option value="Inicial - Primaria - Secundaria">Inicial - Primaria - Secundaria</option>
-                    <option value="Superior No Universitario">Superior No Universitario</option>
-                    <option value="Superior Universitario">Superior Universitario</option>
+                    <option value="Básica Especial">Básica Especial</option>
+                    <option value="Técnico-Productiva">Técnico-Productiva</option>
+                    <option value="Superior">Superior</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="gestion">Tipo de Gestión</label>
+                <select id="gestion" formControlName="gestion">
+                    <option value="Pública de gestión directa">Pública de gestión directa</option>
+                    <option value="Pública de gestión privada">Pública de gestión privada</option>
+                    <option value="Privada">Privada</option>
                 </select>
             </div>
 
@@ -51,193 +72,136 @@
             </div>
 
             <div class="form-group">
-                <label for="coor_lat">Latitud</label>
-                <input type="text" id="coor_lat" formControlName="coord_lat" />
-            </div>
-
-            <div class="form-group">
-                <label for="coor_long">Longitud</label>
-                <input type="text" id="coor_long" formControlName="coord_long" />
-            </div>
-
-            <div class="form-group">
-                <label for="total_estudiantes">Total Estudiantes</label>
-                <input type="number" id="total_estudiantes" formControlName="total_estudiantes" />
+                <label for="centro_poblado">Centro Poblado</label>
+                <input type="text" id="centro_poblado" formControlName="centro_poblado" />
             </div>
         </div>
     </div>
 
     <div class="form-container">
         <div class="section-header">
-            <h3>🏗️ Proyectos de Infraestructura</h3>
+            <h3>🏗️ Proyectos de Inversión (Invierte.pe)</h3>
         </div>
         <div class="form-grid">
-            <div class="form-group full-width">
-                <label for="id_proyecto">CUI Proyecto</label>
-                <input type="text" id="id_proyecto" formControlName="id_proyecto" />
+            <div class="form-group">
+                <label for="cui_proyecto">CUI (Código Único de Inversión)</label>
+                <input type="text" id="cui_proyecto" formControlName="cui_proyecto" />
             </div>
 
             <div class="form-group">
                 <label for="estado_proyecto">Estado del Proyecto</label>
                 <select id="estado_proyecto" formControlName="estado_proyecto">
-                    <option value="">Seleccione Estado</option>
-                    <option value="En Ejecución">En Ejecución</option>
-                    <option value="Aprobado">Aprobado</option>
-                    <option value="Viable">Viable</option>
-                    <option value="Paralizado">Paralizado</option>
-                    <option value="Concluido">Concluido</option>
+                    <option value="Sin Proyecto">Sin Proyecto</option>
+                    <option value="Idea">Idea</option>
+                    <option value="Expediente Técnico">Expediente Técnico</option>
+                    <option value="Ejecución">Ejecución</option>
+                    <option value="Paralizada">Paralizada</option>
+                    <option value="Culminada">Culminada</option>
                 </select>
-            </div>
-
-            <div class="form-group">
-                <label for="tipo_obra">Tipo de Obra</label>
-                <input type="text" id="tipo_obra" formControlName="tipo_obra" placeholder="Aula, Losas, etc." />
             </div>
 
             <div class="form-group">
                 <label for="avance_fisico">Avance Físico (%)</label>
-                <input type="number" id="avance_fisico" formControlName="avance_fisico" min="0" max="100" />
-                <div class="field-message" *ngIf="form.get('avance_fisico')?.invalid && form.get('avance_fisico')?.touched">
-                    Ingrese un número válido entre 0 y 100.
-                </div>
+                <input type="number" id="avance_fisico" formControlName="avance_fisico" min="0" max="100" step="0.01" value="0" />
             </div>
 
             <div class="form-group">
-                <label for="avance_financiero">Avance Financiero (%)</label>
-                <input type="number" id="avance_financiero" formControlName="avance_financiero" min="0" max="100" />
-                <div class="field-message" *ngIf="form.get('avance_financiero')?.invalid && form.get('avance_financiero')?.touched">
-                    Ingrese un número válido entre 0 y 100.
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="monto_total">Monto Total (S/)</label>
-                <input type="number" id="monto_total" formControlName="monto_total" />
-            </div>
-
-            <div class="form-group">
-                <label for="monto_devengado">Monto Devengado (S/)</label>
-                <input type="number" id="monto_devengado" formControlName="monto_devengado" />
-            </div>
-
-            <div class="form-group">
-                <label for="unidad_ejecutora">Unidad Ejecutora</label>
-                <select id="unidad_ejecutora" formControlName="unidad_ejecutora">
-                    <option value="">Seleccione Unidad Ejecutora</option>
-                    <option value="REGIÓN LAMBAYEQUE - SEDE CENTRAL">REGIÓN LAMBAYEQUE - SEDE CENTRAL</option>
-                    <option value="PROYECTO ESPECIAL OLMOS TINAJONES">PROYECTO ESPECIAL OLMOS TINAJONES</option>
-                    <option value="GERENCIA REGIONAL DE EDUCACIÓN LAMBAYEQUE">GERENCIA REGIONAL DE EDUCACIÓN LAMBAYEQUE</option>
-                    <option value="UNIDAD DE GESTIÓN EDUCATIVA LOCAL CHICLAYO">UNIDAD DE GESTIÓN EDUCATIVA LOCAL CHICLAYO</option>
-                    <option value="UNIDAD DE GESTIÓN EDUCATIVA LOCAL LAMBAYEQUE">UNIDAD DE GESTIÓN EDUCATIVA LOCAL LAMBAYEQUE</option>
-                    <option value="UNIDAD DE GESTIÓN EDUCATIVA LOCAL FERREÑAFE">UNIDAD DE GESTIÓN EDUCATIVA LOCAL FERREÑAFE</option>
-                    <option value="COLEGIO MILITAR ELÍAS AGUIRRE">COLEGIO MILITAR ELÍAS AGUIRRE</option>
-                    <option value="INSTITUTO SUPERIOR TECNOLÓGICO ENRIQUE LÓPEZ ALBÚJAR">INSTITUTO SUPERIOR TECNOLÓGICO ENRIQUE LÓPEZ ALBÚJAR</option>
-                </select>
+                <label for="monto_total">Monto Total Inversión (S/)</label>
+                <input type="number" id="monto_total" formControlName="monto_total" step="0.01" value="0" />
             </div>
         </div>
     </div>
 
     <div class="form-container">
         <div class="section-header">
-            <h3>💻 Equipamiento</h3>
+            <h3>🏢 Condiciones de Infraestructura y Equipamiento</h3>
         </div>
         <div class="form-grid">
+            <div class="form-group">
+                <label for="estado_infra">Estado de Infraestructura (1-5)</label>
+                <input type="number" id="estado_infra" formControlName="estado_infra" min="1" max="5" />
+            </div>
+
+            <div class="form-group">
+                <label for="aulas_buenas">Aulas en Buen Estado</label>
+                <input type="number" id="aulas_buenas" formControlName="aulas_buenas" value="0" />
+            </div>
+
             <div class="form-group">
                 <label for="mobiliario_optimo_porc">Mobiliario Óptimo (%)</label>
-                <input type="number" id="mobiliario_optimo_porc" formControlName="mobiliario_optimo_porc" min="0" max="100" step="1" />
-                <div class="field-message" *ngIf="form.get('mobiliario_optimo_porc')?.invalid && form.get('mobiliario_optimo_porc')?.touched">
-                    Ingrese un número válido entre 0 y 100.
-                </div>
+                <input type="number" id="mobiliario_optimo_porc" formControlName="mobiliario_optimo_porc" min="0" max="100" step="0.01" value="0" />
             </div>
 
             <div class="form-group">
-                <label for="computadoras_total">Computadoras Totales</label>
-                <input type="number" id="computadoras_total" formControlName="computadoras_total" />
+                <label for="computadoras_total">Total Laptops / Computadoras</label>
+                <input type="number" id="computadoras_total" formControlName="computadoras_total" value="0" />
+            </div>
+        </div>
+
+        <label style="display: block; margin-top: 15px; padding-left: 20px; font-weight: bold; color: #555;">Servicios Básicos:</label>
+        <div class="form-grid" style="margin-top: 10px;">
+            <div class="checkbox-group">
+                <input type="checkbox" id="servicio_agua" formControlName="servicio_agua" />
+                <label for="servicio_agua">Conexión de Agua</label>
             </div>
 
-            <div class="form-group">
-                <label for="tiene_internet">¿Tiene Internet?</label>
-                <select id="tiene_internet" formControlName="tiene_internet">
-                    <option value="">Seleccione</option>
-                    <option value="SI">Sí</option>
-                    <option value="NO">No</option>
-                </select>
+            <div class="checkbox-group">
+                <input type="checkbox" id="servicio_desague" formControlName="servicio_desague" />
+                <label for="servicio_desague">Desagüe / Pozo</label>
             </div>
 
-            <div class="form-group">
-                <label for="tiene_laboratorio">¿Tiene Laboratorio?</label>
-                <select id="tiene_laboratorio" formControlName="tiene_laboratorio">
-                    <option value="">Seleccione</option>
-                    <option value="SI">Sí</option>
-                    <option value="NO">No</option>
-                </select>
+            <div class="checkbox-group">
+                <input type="checkbox" id="servicio_luz" formControlName="servicio_luz" />
+                <label for="servicio_luz">Electricidad</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="tiene_internet" formControlName="tiene_internet" />
+                <label for="tiene_internet">Internet Operativo</label>
+            </div>
+
+            <div class="checkbox-group" style="background: #fff5f5; border: 1px dashed #e74c3c;">
+                <input type="checkbox" id="riesgo_critico" formControlName="riesgo_critico" />
+                <label for="riesgo_critico" style="color: #e74c3c; font-weight: bold;">⚠️ RIESGO DE DERRUMBE</label>
             </div>
         </div>
     </div>
 
     <div class="form-container">
         <div class="section-header">
-            <h3>👥 Recursos Humanos</h3>
+            <h3>👥 Personal Docente y Administrativo</h3>
         </div>
         <div class="form-grid">
             <div class="form-group">
-                <label for="docentes_requeridos">Docentes Requeridos</label>
+                <label for="total_matricula">Alumnos Matriculados</label>
+                <input type="number" id="total_matricula" formControlName="total_matricula" />
+            </div>
+
+            <div class="form-group">
+                <label for="docentes_requeridos">Docentes Requeridos (CAP)</label>
                 <input type="number" id="docentes_requeridos" formControlName="docentes_requeridos" />
             </div>
 
             <div class="form-group">
-                <label for="docentes_asignados">Docentes Asignados</label>
-                <input type="number" id="docentes_asignados" formControlName="docentes_asignados" />
-                <div class="field-message" *ngIf="form.get('docentes_asignados')?.hasError('maxExceeded') && form.get('docentes_asignados')?.touched">
-                    Los docentes asignados no pueden ser mayores a los requeridos.
-                </div>
+                <label for="docentes_nombrados">Docentes Nombrados</label>
+                <input type="number" id="docentes_nombrados" formControlName="docentes_nombrados" value="0" />
             </div>
 
             <div class="form-group">
-                <label for="personal_administrativo">Personal Administrativo</label>
-                <input type="number" id="personal_administrativo" formControlName="personal_administrativo" />
-            </div>
-        </div>
-    </div>
-
-    <div class="form-container">
-        <div class="section-header">
-            <h3>🚰 Condiciones Básicas</h3>
-        </div>
-        <div class="form-grid">
-            <div class="form-group">
-                <label for="servicio_agua">¿Servicio de Agua?</label>
-                <select id="servicio_agua" formControlName="servicio_agua">
-                    <option value="">Seleccione</option>
-                    <option value="SI">Sí</option>
-                    <option value="NO">No</option>
-                </select>
+                <label for="docentes_contratados">Docentes Contratados</label>
+                <input type="number" id="docentes_contratados" formControlName="docentes_contratados" value="0" />
             </div>
 
             <div class="form-group">
-                <label for="servicio_desague">¿Servicio de Desagüe?</label>
-                <select id="servicio_desague" formControlName="servicio_desague">
-                    <option value="">Seleccione</option>
-                    <option value="SI">Sí</option>
-                    <option value="NO">No</option>
-                </select>
+                <label for="personal_admin">Personal Administrativo</label>
+                <input type="number" id="personal_admin" formControlName="personal_admin" value="0" />
             </div>
 
             <div class="form-group">
-                <label for="servicio_electricidad">¿Servicio Eléctrico?</label>
-                <select id="servicio_electricidad" formControlName="servicio_electricidad">
-                    <option value="">Seleccione</option>
-                    <option value="SI">Sí</option>
-                    <option value="NO">No</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="estado_critico_infra">¿Estado Crítico de Infraestructura?</label>
-                <select id="estado_critico_infra" formControlName="estado_critico_infra">
-                    <option value="">Seleccione</option>
-                    <option value="SI">Sí</option>
-                    <option value="NO">No</option>
+                <label for="tiene_psicologo">¿Psicólogo en la I.E.?</label>
+                <select id="tiene_psicologo" formControlName="tiene_psicologo">
+                    <option value="NO">NO</option>
+                    <option value="SI">SÍ</option>
                 </select>
             </div>
         </div>

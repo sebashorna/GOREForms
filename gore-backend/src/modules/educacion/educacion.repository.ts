@@ -100,9 +100,7 @@ class EducacionRepository {
                 nivel: dto.nivel,
                 provincia: dto.provincia,
                 distrito: dto.distrito,
-                coord_lat: dto.coord_lat,
-                coord_long: dto.coord_long,
-                total_estudiantes: dto.total_estudiantes,
+                total_estudiantes: dto.total_matricula,
                 fecha_modificacion_educacion: new Date(),
             },
             update: {
@@ -110,9 +108,7 @@ class EducacionRepository {
                 nivel: dto.nivel,
                 provincia: dto.provincia,
                 distrito: dto.distrito,
-                coord_lat: dto.coord_lat,
-                coord_long: dto.coord_long,
-                total_estudiantes: dto.total_estudiantes,
+                total_estudiantes: dto.total_matricula,
                 fecha_modificacion_educacion: new Date(),
             },
         });
@@ -132,7 +128,7 @@ class EducacionRepository {
                 mobiliario_optimo_porc: dto.mobiliario_optimo_porc,
                 computadoras_total: dto.computadoras_total,
                 tiene_internet: dto.tiene_internet,
-                tiene_laboratorio: dto.tiene_laboratorio,
+                tiene_laboratorio: false,
                 fecha_corte: dto.fecha_corte
             }
         });
@@ -144,34 +140,34 @@ class EducacionRepository {
         dto: CrearEducacionDTO
     ) {
 
-        if (!dto.id_proyecto || dto.id_proyecto <= 0) {
+        if (!dto.cui_proyecto || dto.cui_proyecto.trim() === '') {
             return;
         }
 
+        const idProyecto = parseInt(dto.cui_proyecto) || 0;
+
         await tx.proyectos_infraestructura.upsert({
             where: {
-                id_proyecto: dto.id_proyecto
+                id_proyecto: idProyecto
             },
             create: {
-                id_proyecto: dto.id_proyecto,
+                id_proyecto: idProyecto,
                 cod_modular: dto.cod_modular,
                 estado_proyecto: dto.estado_proyecto,
-                tipo_obra: dto.tipo_obra,
-                unidad_ejecutora: dto.unidad_ejecutora,
+                tipo_obra: "",
+                unidad_ejecutora: "",
                 avance_fisico: dto.avance_fisico,
-                avance_financiero: dto.avance_financiero,
+                avance_financiero: dto.avance_fisico,
                 monto_total: dto.monto_total,
-                monto_devengado: dto.monto_devengado,
+                monto_devengado: dto.monto_total,
                 fecha_corte: dto.fecha_corte
             },
             update: {
                 estado_proyecto: dto.estado_proyecto,
-                tipo_obra: dto.tipo_obra,
-                unidad_ejecutora: dto.unidad_ejecutora,
                 avance_fisico: dto.avance_fisico,
-                avance_financiero: dto.avance_financiero,
+                avance_financiero: dto.avance_fisico,
                 monto_total: dto.monto_total,
-                monto_devengado: dto.monto_devengado,
+                monto_devengado: dto.monto_total,
                 fecha_corte: dto.fecha_corte
             }
         });
@@ -189,8 +185,8 @@ class EducacionRepository {
             data: {
                 cod_modular: dto.cod_modular,
                 docentes_requeridos: dto.docentes_requeridos,
-                docentes_asignados: dto.docentes_asignados,
-                personal_administrativo: dto.personal_administrativo,
+                docentes_asignados: dto.docentes_nombrados + dto.docentes_contratados,
+                personal_administrativo: dto.personal_admin,
                 fecha_corte: dto.fecha_corte
             }
         });
@@ -202,11 +198,12 @@ class EducacionRepository {
         dto: CrearEducacionDTO
     ) {
         const historialData: any = {
-            cod_modular: dto.cod_modular,
             tipo: "educacion",
-            fecha_modificacion_historial: new Date(),
+            referencia: dto.nombre_ie,
+            nombre_usuario: dto.nombre_usuario,
+            fecha_modificacion_historial: new Date()
         };
-        
+
         await tx.historial.create({
             data: historialData
         });
@@ -224,8 +221,8 @@ class EducacionRepository {
                 cod_modular: dto.cod_modular,
                 servicio_agua: dto.servicio_agua,
                 servicio_desague: dto.servicio_desague,
-                servicio_electricidad: dto.servicio_electricidad,
-                estado_critico_infra: dto.estado_critico_infra,
+                servicio_electricidad: dto.servicio_luz,
+                estado_critico_infra: dto.riesgo_critico,
                 fecha_corte: dto.fecha_corte
             }
         });

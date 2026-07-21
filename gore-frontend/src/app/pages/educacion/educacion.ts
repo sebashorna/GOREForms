@@ -27,78 +27,76 @@ export class Educacion {
 
   form = this.fb.group({
     //==============================
-    // INFORMACIÓN GENERAL
+    // IDENTIFICACIÓN DE LA I.E.
     //==============================
 
     cod_modular: ['', [Validators.required, Validators.pattern(/^\d{1,8}$/)]],
 
     nombre_ie: [''],
 
+    dre: ['LAMBAYEQUE'],
+
+    ugel: ['CHICLAYO'],
+
     nivel: [''],
+
+    gestion: ['Pública de gestión directa'],
 
     provincia: [''],
 
     distrito: [''],
 
-    coord_lat: [0],
-
-    coord_long: [0],
-
-    total_estudiantes: [0],
+    centro_poblado: [''],
 
     //==============================
-    // PROYECTO DE INFRAESTRUCTURA
+    // PROYECTOS DE INVERSIÓN
     //==============================
 
-    id_proyecto: [0],
+    cui_proyecto: [''],
 
-    estado_proyecto: [''],
-
-    tipo_obra: [''],
-
-    unidad_ejecutora: [''],
+    estado_proyecto: ['Sin Proyecto'],
 
     avance_fisico: [0, [Validators.min(0), Validators.max(100)]],
 
-    avance_financiero: [0, [Validators.min(0), Validators.max(100)]],
-
     monto_total: [0],
 
-    monto_devengado: [0],
+    //==============================
+    // INFRAESTRUCTURA Y EQUIPAMIENTO
+    //==============================
 
-    //==============================
-    // EQUIPAMIENTO
-    //==============================
+    estado_infra: [0],
+
+    aulas_buenas: [0],
 
     mobiliario_optimo_porc: [0, [Validators.min(0), Validators.max(100)]],
 
     computadoras_total: [0],
 
-    tiene_internet: [''],
+    servicio_agua: [false],
 
-    tiene_laboratorio: [''],
+    servicio_desague: [false],
+
+    servicio_luz: [false],
+
+    tiene_internet: [false],
+
+    riesgo_critico: [false],
 
     //==============================
-    // RECURSOS HUMANOS
+    // PERSONAL DOCENTE Y ADMINISTRATIVO
     //==============================
+
+    total_matricula: [0],
 
     docentes_requeridos: [0],
 
-    docentes_asignados: [0],
+    docentes_nombrados: [0],
 
-    personal_administrativo: [0],
+    docentes_contratados: [0],
 
-    //==============================
-    // CONDICIONES BÁSICAS
-    //==============================
+    personal_admin: [0],
 
-    servicio_agua: [''],
-
-    servicio_desague: [''],
-
-    servicio_electricidad: [''],
-
-    estado_critico_infra: [''],
+    tiene_psicologo: ['NO'],
 
     //==============================
     // FECHA
@@ -113,7 +111,8 @@ export class Educacion {
   private setupValidators(): void {
     // docentes asignados <= docentes requeridos
     this.form.get('docentes_requeridos')?.valueChanges.subscribe(() => this.checkDocentes());
-    this.form.get('docentes_asignados')?.valueChanges.subscribe(() => this.checkDocentes());
+    this.form.get('docentes_nombrados')?.valueChanges.subscribe(() => this.checkDocentes());
+    this.form.get('docentes_contratados')?.valueChanges.subscribe(() => this.checkDocentes());
 
     // fecha debe ser mayor a hoy
     this.form.get('fecha_corte')?.valueChanges.subscribe(() => this.checkFecha());
@@ -121,9 +120,11 @@ export class Educacion {
 
   private checkDocentes(): void {
     const req = Number(this.form.get('docentes_requeridos')?.value) || 0;
-    const asig = Number(this.form.get('docentes_asignados')?.value) || 0;
-    const control = this.form.get('docentes_asignados');
-    if (asig > req) {
+    const nombrados = Number(this.form.get('docentes_nombrados')?.value) || 0;
+    const contratados = Number(this.form.get('docentes_contratados')?.value) || 0;
+    const totalAsignados = nombrados + contratados;
+    const control = this.form.get('docentes_requeridos');
+    if (totalAsignados > req && req > 0) {
       control?.setErrors({ maxExceeded: true });
     } else {
       if (control?.hasError('maxExceeded')) {
@@ -172,7 +173,6 @@ export class Educacion {
 
     this.educacionService
       .obtenerReporteCompleto(id)
-
       .subscribe({
         next: (resp) => {
           if (!resp.success || !resp.data || !resp.data.institucion) {
@@ -203,17 +203,14 @@ export class Educacion {
             patchValues['nivel'] = ie.nivel || '';
             patchValues['provincia'] = ie.provincia || '';
             patchValues['distrito'] = ie.distrito || '';
-            patchValues['coord_lat'] = Number(ie.coord_lat) || 0;
-            patchValues['coord_long'] = Number(ie.coord_long) || 0;
-            patchValues['total_estudiantes'] = ie.total_estudiantes || 0;
+            patchValues['total_matricula'] = ie.total_estudiantes || 0;
           }
 
           // Equipamiento
           if (eq) {
             patchValues['mobiliario_optimo_porc'] = Number(eq.mobiliario_optimo_porc) || 0;
             patchValues['computadoras_total'] = eq.computadoras_total ?? 0;
-            patchValues['tiene_internet'] = eq.tiene_internet ? 'SI' : '';
-            patchValues['tiene_laboratorio'] = eq.tiene_laboratorio ? 'SI' : '';
+            patchValues['tiene_internet'] = eq.tiene_internet ? true : false;
           }
 
           // Recursos Humanos
@@ -225,22 +222,17 @@ export class Educacion {
 
           // Condiciones Básicas
           if (cb) {
-            patchValues['servicio_agua'] = cb.servicio_agua ? 'SI' : '';
-            patchValues['servicio_desague'] = cb.servicio_desague ? 'SI' : '';
-            patchValues['servicio_electricidad'] = cb.servicio_electricidad ? 'SI' : '';
-            patchValues['estado_critico_infra'] = cb.estado_critico_infra ? 'SI' : '';
+            patchValues['servicio_agua'] = cb.servicio_agua ? true : false;
+            patchValues['servicio_desague'] = cb.servicio_desague ? true : false;
+            patchValues['servicio_electricidad'] = cb.servicio_electricidad ? true : false;
+            patchValues['estado_critico_infra'] = cb.estado_critico_infra ? true : false;
           }
 
           // Proyecto de Infraestructura
           if (pr) {
-            patchValues['id_proyecto'] = pr.id_proyecto ?? 0;
             patchValues['estado_proyecto'] = pr.estado_proyecto || '';
-            patchValues['tipo_obra'] = pr.tipo_obra || '';
-            patchValues['unidad_ejecutora'] = pr.unidad_ejecutora || '';
             patchValues['avance_fisico'] = Number(pr.avance_fisico) || 0;
-            patchValues['avance_financiero'] = Number(pr.avance_financiero) || 0;
             patchValues['monto_total'] = Number(pr.monto_total) || 0;
-            patchValues['monto_devengado'] = Number(pr.monto_devengado) || 0;
           }
 
           this.form.patchValue(patchValues);
@@ -330,31 +322,32 @@ export class Educacion {
     const dto: CrearEducacionDTO = {
       cod_modular: Number(rawValues.cod_modular),
       nombre_ie: rawValues.nombre_ie || '',
+      dre: rawValues.dre || 'LAMBAYEQUE',
+      ugel: rawValues.ugel || 'CHICLAYO',
       nivel: rawValues.nivel || '',
+      gestion: rawValues.gestion || 'Pública de gestión directa',
       provincia: rawValues.provincia || '',
       distrito: rawValues.distrito || '',
-      coord_lat: Number(rawValues.coord_lat),
-      coord_long: Number(rawValues.coord_long),
-      total_estudiantes: Number(rawValues.total_estudiantes),
-      id_proyecto: Number(rawValues.id_proyecto),
-      estado_proyecto: rawValues.estado_proyecto || '',
-      tipo_obra: rawValues.tipo_obra || '',
-      unidad_ejecutora: rawValues.unidad_ejecutora || '',
+      centro_poblado: rawValues.centro_poblado || '',
+      cui_proyecto: rawValues.cui_proyecto || '',
+      estado_proyecto: rawValues.estado_proyecto || 'Sin Proyecto',
       avance_fisico: Number(rawValues.avance_fisico),
-      avance_financiero: Number(rawValues.avance_financiero),
       monto_total: Number(rawValues.monto_total),
-      monto_devengado: Number(rawValues.monto_devengado),
+      estado_infra: Number(rawValues.estado_infra),
+      aulas_buenas: Number(rawValues.aulas_buenas),
       mobiliario_optimo_porc: Number(rawValues.mobiliario_optimo_porc),
       computadoras_total: Number(rawValues.computadoras_total),
-      tiene_internet: this.parseBoolean(rawValues.tiene_internet),
-      tiene_laboratorio: this.parseBoolean(rawValues.tiene_laboratorio),
+      servicio_agua: !!rawValues.servicio_agua,
+      servicio_desague: !!rawValues.servicio_desague,
+      servicio_luz: !!rawValues.servicio_luz,
+      tiene_internet: !!rawValues.tiene_internet,
+      riesgo_critico: !!rawValues.riesgo_critico,
+      total_matricula: Number(rawValues.total_matricula),
       docentes_requeridos: Number(rawValues.docentes_requeridos),
-      docentes_asignados: Number(rawValues.docentes_asignados),
-      personal_administrativo: Number(rawValues.personal_administrativo),
-      servicio_agua: this.parseBoolean(rawValues.servicio_agua),
-      servicio_desague: this.parseBoolean(rawValues.servicio_desague),
-      servicio_electricidad: this.parseBoolean(rawValues.servicio_electricidad),
-      estado_critico_infra: this.parseBoolean(rawValues.estado_critico_infra),
+      docentes_nombrados: Number(rawValues.docentes_nombrados),
+      docentes_contratados: Number(rawValues.docentes_contratados),
+      personal_admin: Number(rawValues.personal_admin),
+      tiene_psicologo: rawValues.tiene_psicologo || 'NO',
       fecha_corte: fechaCorte,
     };
 
@@ -376,14 +369,7 @@ export class Educacion {
   }
 
   private parseBoolean(value: unknown): boolean {
-    return (
-      value === true ||
-      value === 'true' ||
-      value === 'SI' ||
-      value === 'Si' ||
-      value === 'YES' ||
-      value === 'yes'
-    );
+    return value === true || value === 'true' || value === 'SI' || value === 'Si' || value === 'YES' || value === 'yes';
   }
 
   private parseDate(value: unknown): Date | null {
@@ -425,73 +411,41 @@ export class Educacion {
       nivel: '',
       provincia: '',
       distrito: '',
-      coord_lat: 0,
-      coord_long: 0,
-      total_estudiantes: 0,
+      total_matricula: 0,
     });
   }
 
   limpiarFormulario(): void {
-
     this.form.reset({
-
       cod_modular: '',
-
       nombre_ie: '',
-
+      dre: 'LAMBAYEQUE',
+      ugel: 'CHICLAYO',
       nivel: '',
-
+      gestion: 'Pública de gestión directa',
       provincia: '',
-
       distrito: '',
-
-      coord_lat: 0,
-
-      coord_long: 0,
-
-      total_estudiantes: 0,
-
-      id_proyecto: 0,
-
-      estado_proyecto: '',
-
-      tipo_obra: '',
-
-      unidad_ejecutora: '',
-
+      centro_poblado: '',
+      cui_proyecto: '',
+      estado_proyecto: 'Sin Proyecto',
       avance_fisico: 0,
-
-      avance_financiero: 0,
-
       monto_total: 0,
-
-      monto_devengado: 0,
-
+      estado_infra: 0,
+      aulas_buenas: 0,
       mobiliario_optimo_porc: 0,
-
       computadoras_total: 0,
-
-      tiene_internet: '',
-
-      tiene_laboratorio: '',
-
+      servicio_agua: false,
+      servicio_desague: false,
+      servicio_luz: false,
+      tiene_internet: false,
+      riesgo_critico: false,
+      total_matricula: 0,
       docentes_requeridos: 0,
-
-      docentes_asignados: 0,
-
-      personal_administrativo: 0,
-
-      servicio_agua: '',
-
-      servicio_desague: '',
-
-      servicio_electricidad: '',
-
-      estado_critico_infra: '',
-
+      docentes_nombrados: 0,
+      docentes_contratados: 0,
+      personal_admin: 0,
+      tiene_psicologo: 'NO',
       fecha_corte: ''
-
     });
-
   }
 }

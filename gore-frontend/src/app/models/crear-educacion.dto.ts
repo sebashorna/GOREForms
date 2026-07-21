@@ -1,59 +1,83 @@
 export interface CrearEducacionDTO {
 
-  cod_modular: number;
+    // ============================
+    // Identificación de la I.E.
+    // ============================
 
-  nombre_ie: string;
+    cod_modular: number;
 
-  nivel: string;
+    nombre_ie: string;
 
-  provincia: string;
+    dre: string;
 
-  distrito: string;
+    ugel: string;
 
-  coord_lat: number;
+    nivel: string;
 
-  coord_long: number;
+    gestion: string;
 
-  total_estudiantes: number;
+    provincia: string;
 
-  id_proyecto: number;
+    distrito: string;
 
-  estado_proyecto: string;
+    centro_poblado?: string;
 
-  tipo_obra: string;
+    // ============================
+    // Proyectos de Inversión
+    // ============================
 
-  unidad_ejecutora: string;
+    cui_proyecto?: string;
 
-  avance_fisico: number;
+    estado_proyecto: string;
 
-  avance_financiero: number;
+    avance_fisico: number;
 
-  monto_total: number;
+    monto_total: number;
 
-  monto_devengado: number;
+    // ============================
+    // Infraestructura y Equipamiento
+    // ============================
 
-  mobiliario_optimo_porc: number;
+    estado_infra: number;
 
-  computadoras_total: number;
+    aulas_buenas: number;
 
-  tiene_internet: boolean;
+    mobiliario_optimo_porc: number;
 
-  tiene_laboratorio: boolean;
+    computadoras_total: number;
 
-  docentes_requeridos: number;
+    servicio_agua: boolean;
 
-  docentes_asignados: number;
+    servicio_desague: boolean;
 
-  personal_administrativo: number;
+    servicio_luz: boolean;
 
-  servicio_agua: boolean;
+    tiene_internet: boolean;
 
-  servicio_desague: boolean;
+    riesgo_critico: boolean;
 
-  servicio_electricidad: boolean;
+    // ============================
+    // Personal Docente y Administrativo
+    // ============================
 
-  estado_critico_infra: boolean;
+    total_matricula: number;
 
-  fecha_corte: Date;
+    docentes_requeridos: number;
+
+    docentes_nombrados: number;
+
+    docentes_contratados: number;
+
+    personal_admin: number;
+
+    tiene_psicologo: string;
+
+    // ============================
+    // Común
+    // ============================
+
+    fecha_corte: Date;
+
+    id_usuario?: number;
 
 }
