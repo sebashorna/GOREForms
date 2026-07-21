@@ -9,6 +9,7 @@ import dashboardRoutes from "./modules/dashboard/dashboard.routes";
 import saludRoutes from "./modules/salud/salud.routes";
 import educacionRoutes from "./modules/educacion/educacion.routes";
 import historialRoutes from "./modules/historial/historial.routes";
+import authRoutes from "./modules/auth/routes/auth.routes";
 
 const app = express();
 
@@ -42,6 +43,8 @@ app.get("/", (_, res) => {
         estado: "Activo",
     });
 });
+
+app.use("/api/auth", authRoutes);
 
 app.use("/api/salud", saludRoutes);
 app.use("/api/educacion", educacionRoutes);

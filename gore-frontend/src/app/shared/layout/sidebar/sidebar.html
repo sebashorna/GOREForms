@@ -16,23 +16,35 @@
 
         </a>
 
-        <a routerLink="/salud">
+        @if(tieneAcceso('salud')){
 
-            🏥 Salud
+            <a routerLink="/salud">
 
-        </a>
+                🏥 Salud
 
-        <a routerLink="/educacion">
+            </a>
 
-            🏫 Educación
+        }
 
-        </a>
+        @if(tieneAcceso('educacion')){
 
-        <a routerLink="/historial">
+            <a routerLink="/educacion">
 
-            📜 Historial
+                🏫 Educación
 
-        </a>
+            </a>
+
+        }
+
+        @if(tieneAcceso('historial')){
+
+            <a routerLink="/historial">
+
+                📜 Historial
+
+            </a>
+
+        }
 
     </nav>
 </div>

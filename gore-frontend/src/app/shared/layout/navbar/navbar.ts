@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -9,16 +10,26 @@ import { Router } from '@angular/router';
 })
 export class Navbar {
   menuAbierto = false;
+  usuario: any = null;
+
   constructor(
+    private authService: AuthService,
     private router: Router
   ) {}
 
-  cerrarSesion() {
+  ngOnInit(): void {
+    this.usuario = this.authService.obtenerUsuario();
+  }
 
-    // Más adelante eliminaremos aquí el JWT
-    localStorage.clear();
-
-    this.router.navigate(['/login']);
-
+  cerrarSesion(): void {
+    this.authService.logout().subscribe({
+      next: () => {
+        this.router.navigate(['/login']);
+      },
+      error: () => {
+        // Aunque falle el logout en el servidor, redirigir
+        this.router.navigate(['/login']);
+      }
+    });
   }
 }

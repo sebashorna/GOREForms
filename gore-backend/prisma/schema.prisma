@@ -65,7 +65,7 @@ model seguimiento_proyectos {
 model sesiones {
   id           Int       @id @default(autoincrement())
   id_usuario   Int?
-  token        String?   @db.Uuid
+  token        String?
   fecha_inicio DateTime? @default(now()) @db.Timestamp(6)
   fecha_expira DateTime? @db.Timestamp(6)
   activo       Boolean?  @default(true)

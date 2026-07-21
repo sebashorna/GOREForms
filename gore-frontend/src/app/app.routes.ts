@@ -6,6 +6,7 @@ import { MainLayout } from './shared/layout/main-layout/main-layout';
 import { Salud } from './pages/salud/salud';
 import { Educacion } from './pages/educacion/educacion';
 import { Historial } from './pages/historial/historial';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
 
@@ -26,6 +27,7 @@ export const routes: Routes = [
   {
     path: '',
     component: MainLayout,
+    canActivate: [AuthGuard],
     children: [
 
       {
