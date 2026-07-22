@@ -29,9 +29,10 @@ class EducacionController {
                 console.error('Error details:', JSON.stringify(err, Object.getOwnPropertyNames(err)));
             }
 
+            const mensaje = err instanceof Error ? err.message : 'Error desconocido';
             return fail(
                 res,
-                "No fue posible registrar el formulario."
+                `No fue posible registrar el formulario. ${mensaje}`
             );
 
         }

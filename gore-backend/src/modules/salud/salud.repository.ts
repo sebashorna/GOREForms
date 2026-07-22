@@ -358,16 +358,18 @@ class SaludRepository {
         });
 
     }
+
     private async guardarHistorial(
         tx: Prisma.TransactionClient,
         dto: CrearSaludDTO
     ) {
         const historialData: any = {
-            id_renaes: dto.id_renaes,
             tipo: "salud",
+            referencia: String(dto.id_renaes),
+            nombre_usuario: dto.nombre_usuario || "Sistema",
             fecha_modificacion_historial: new Date(),
         };
-        
+
         await tx.historial.create({
             data: historialData
         });

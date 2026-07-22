@@ -42,14 +42,6 @@ class HistorialRepository {
 
         const registros = await (prisma.historial.findMany as any)({
             where,
-            include: {
-                establecimientos: {
-                    select: { nombre_eess: true }
-                },
-                instituciones_educativas: {
-                    select: { nombre_ie: true }
-                }
-            },
             orderBy: {
                 fecha_modificacion_historial: 'desc'
             }
@@ -57,23 +49,15 @@ class HistorialRepository {
 
         // Transformar los resultados
         const resultados = registros.map((r: any) => {
-            const historial = r as any;
             const tipo = r.tipo === 'salud' ? 'Salud' : 'Educación';
-            
-            // Obtener el nombre según el tipo
-            let nombre = historial.referencia || '—';
-            if (r.tipo === 'salud' && r.establecimientos?.nombre_eess) {
-                nombre = r.establecimientos.nombre_eess;
-            } else if (r.tipo === 'educacion' && r.instituciones_educativas?.nombre_ie) {
-                nombre = r.instituciones_educativas.nombre_ie;
-            }
+            const nombre = r.referencia || '—';
 
             return {
                 id_historial: r.id_historial,
                 nombre: nombre,
                 tipo,
                 fecha_modificacion: r.fecha_modificacion_historial,
-                usuario: historial.nombre_usuario || '—'
+                usuario: r.nombre_usuario || '—'
             };
         });
 

@@ -215,13 +215,12 @@ class EducacionRepository {
         dto: CrearEducacionDTO
     ) {
         const historialData: any = {
-            cod_modular: dto.cod_modular,
             tipo: "educacion",
             referencia: String(dto.cod_modular),
-            nombre_usuario: "Sistema",
+            nombre_usuario: dto.nombre_usuario || "Sistema",
             fecha_modificacion_historial: new Date(),
         };
-        
+
         await tx.historial.create({
             data: historialData
         });

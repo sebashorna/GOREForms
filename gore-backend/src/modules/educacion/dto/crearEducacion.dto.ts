@@ -78,4 +78,6 @@ export interface CrearEducacionDTO {
 
     fecha_corte: Date;
 
+    nombre_usuario: string;
+
 }
