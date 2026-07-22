@@ -47,10 +47,51 @@ class HistorialRepository {
             }
         });
 
+        // Collect references for batch queries
+        const educacionRefs = [...new Set(
+            registros
+                .filter((r: any) => r.tipo === 'educacion')
+                .map((r: any) => Number(r.referencia))
+                .filter((n: number) => !isNaN(n))
+        )] as number[];
+
+        const saludRefs = [...new Set(
+            registros
+                .filter((r: any) => r.tipo === 'salud')
+                .map((r: any) => Number(r.referencia))
+                .filter((n: number) => !isNaN(n))
+        )] as number[];
+
+        // Batch queries for names
+        const educacionMap = new Map<number, string>();
+        if (educacionRefs.length > 0) {
+            const ies = await prisma.instituciones_educativas.findMany({
+                where: { cod_modular: { in: educacionRefs } },
+                select: { cod_modular: true, nombre_ie: true }
+            });
+            ies.forEach((ie: any) => educacionMap.set(ie.cod_modular, ie.nombre_ie));
+        }
+
+        const saludMap = new Map<number, string>();
+        if (saludRefs.length > 0) {
+            const eess = await prisma.establecimientos.findMany({
+                where: { id_renaes: { in: saludRefs } },
+                select: { id_renaes: true, nombre_eess: true }
+            });
+            eess.forEach((e: any) => saludMap.set(e.id_renaes, e.nombre_eess));
+        }
+
         // Transformar los resultados
         const resultados = registros.map((r: any) => {
             const tipo = r.tipo === 'salud' ? 'Salud' : 'Educación';
-            const nombre = r.referencia || '—';
+            const refNum = Number(r.referencia);
+
+            let nombre = '—';
+            if (r.tipo === 'educacion' && !isNaN(refNum)) {
+                nombre = educacionMap.get(refNum) || r.referencia || '—';
+            } else if (r.tipo === 'salud' && !isNaN(refNum)) {
+                nombre = saludMap.get(refNum) || r.referencia || '—';
+            }
 
             return {
                 id_historial: r.id_historial,
