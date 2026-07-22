@@ -32,10 +32,11 @@ class HistorialRepository {
             }
         }
 
-        // Filtro por usuario
+        // Filtro por usuario (busca en nombre_usuario)
         if (filtros.usuario) {
-            where.usuarios = {
-                usuario: { contains: filtros.usuario, mode: 'insensitive' }
+            where.nombre_usuario = {
+                contains: filtros.usuario,
+                mode: 'insensitive'
             };
         }
 
@@ -76,7 +77,7 @@ class HistorialRepository {
             };
         });
 
-        // Filtro de búsqueda por nombre (post-query porque viene de relaciones)
+        // Filtro de búsqueda por nombre
         if (filtros.busqueda) {
             const term = filtros.busqueda.toLowerCase();
             return resultados.filter((r: any) =>

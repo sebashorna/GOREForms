@@ -50,7 +50,8 @@ class HistorialController {
 
             return fail(
                 res,
-                "No fue posible obtener el historial."
+                "No fue posible obtener el historial.",
+                500
             );
 
         }
