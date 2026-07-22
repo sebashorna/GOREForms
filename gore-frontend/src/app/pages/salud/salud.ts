@@ -320,81 +320,59 @@ export class Salud {
             patchValues['poblacion_asignada'] = e.poblacion_asignada || 0;
           }
 
-          // Equipamiento
-          if (eq) {
-            patchValues['camas_uci_tot'] = eq.camas_uci_tot ?? 0;
-            patchValues['camas_uci_disp'] = eq.camas_uci_disp ?? 0;
-            patchValues['camas_hospitalarias'] = eq.camas_hospitalarias ?? 0;
-            patchValues['equipo_rayos_x'] = eq.equipo_rayos_x ? 'SI' : '';
-            patchValues['planta_oxigeno'] = eq.planta_oxigeno ? 'SI' : '';
-            patchValues['estado_infra'] = eq.estado_infra ?? 1;
-            patchValues['ventiladores'] = eq.ventiladores ?? 0;
-            patchValues['monitores'] = eq.monitores ?? 0;
-            patchValues['ecografo'] = !!eq.ecografo;
-            patchValues['tomografo'] = !!eq.tomografo;
-            patchValues['operativo'] = Number(eq.operativo) || 0;
-            patchValues['inoperativo'] = Number(eq.inoperativo) || 0;
-          }
-
-          // Recursos Humanos
-          if (rh) {
-            patchValues['med_prog'] = rh.med_prog ?? 0;
-            patchValues['med_exist'] = rh.med_exist ?? 0;
-            patchValues['turno_24h'] = rh.turno_24h ? 'SI' : '';
-            patchValues['enfermeras'] = rh.enfermeras ?? 0;
-            patchValues['tecnicos'] = rh.tecnicos ?? 0;
-            patchValues['pediatra'] = rh.pediatra ?? 0;
-            patchValues['gineco_obstetra'] = rh.gineco_obstetra ?? 0;
-            patchValues['anestesiologo'] = rh.anestesiologo ?? 0;
-            patchValues['cirujano_general'] = rh.cirujano_general ?? 0;
-            patchValues['intensivista'] = rh.intensivista ?? 0;
-            patchValues['internista'] = rh.internista ?? 0;
-            patchValues['cardiologo'] = rh.cardiologo ?? 0;
-            patchValues['traumatologo'] = rh.traumatologo ?? 0;
-            patchValues['otros_especialistas'] = rh.otros_especialistas ?? 0;
-          }
-
-          // Epidemiología
-          if (ep) {
-            patchValues['anho_epi'] = ep.anho_epi ?? new Date().getFullYear();
-            patchValues['semana_epi'] = ep.semana_epi ?? 1;
-            patchValues['casos_dengue'] = ep.casos_dengue ?? 0;
-            patchValues['casos_anemia'] = ep.casos_anemia ?? 0;
-            patchValues['mort_materna'] = ep.mort_materna ?? 0;
-            patchValues['casos_desnutricion'] = ep.casos_desnutricion ?? 0;
-            patchValues['iras_edas'] = ep.iras_edas ?? 0;
-            patchValues['mortalidad_neonatal'] = ep.mortalidad_neonatal ?? 0;
-          }
-
-          // Servicios
-          if (sv) {
-            patchValues['emergencia'] = !!sv.emergencia;
-            patchValues['uci'] = !!sv.uci;
-            patchValues['centro_quirurgico'] = !!sv.centro_quirurgico;
-            patchValues['partos'] = !!sv.partos;
-            patchValues['consultas_diarias_prom'] = Number(sv.consultas_diarias_prom) || 0;
-            patchValues['camas_ocupadas'] = sv.camas_ocupadas ?? 0;
-          }
-
-          // Condiciones Básicas
-          if (cb) {
-            patchValues['agua'] = !!cb.agua;
-            patchValues['desague'] = !!cb.desague;
-            patchValues['electricidad'] = !!cb.electricidad;
-            patchValues['oxigeno'] = !!cb.oxigeno;
-            patchValues['internet'] = !!cb.internet;
-          }
-
-          // Proyecto de Inversión
-          if (pr) {
-            patchValues['id_proyecto'] = pr.id_proyecto ?? 0;
-            patchValues['estado_inversion'] = pr.estado_inversion || '';
-            patchValues['avance_fisico'] = Number(pr.avance_fisico) || 0;
-            patchValues['avance_financiero'] = Number(pr.avance_financiero) || 0;
-            patchValues['monto_total'] = Number(pr.monto_total) || 0;
-            patchValues['monto_devengado'] = Number(pr.monto_devengado) || 0;
-            patchValues['unidad_ejecutora'] = pr.unidad_ejecutora || '';
-          }
+          // Limpiar campos que deben ser siempre nuevos
+          patchValues['camas_uci_tot'] = 0;
+          patchValues['camas_uci_disp'] = 0;
+          patchValues['camas_hospitalarias'] = 0;
+          patchValues['equipo_rayos_x'] = '';
+          patchValues['planta_oxigeno'] = '';
+          patchValues['estado_infra'] = 1;
+          patchValues['ventiladores'] = 0;
+          patchValues['monitores'] = 0;
+          patchValues['ecografo'] = false;
+          patchValues['tomografo'] = false;
+          patchValues['operativo'] = 0;
+          patchValues['inoperativo'] = 0;
+          patchValues['med_prog'] = 0;
+          patchValues['med_exist'] = 0;
+          patchValues['turno_24h'] = '';
+          patchValues['enfermeras'] = 0;
+          patchValues['tecnicos'] = 0;
+          patchValues['pediatra'] = 0;
+          patchValues['gineco_obstetra'] = 0;
+          patchValues['anestesiologo'] = 0;
+          patchValues['cirujano_general'] = 0;
+          patchValues['intensivista'] = 0;
+          patchValues['internista'] = 0;
+          patchValues['cardiologo'] = 0;
+          patchValues['traumatologo'] = 0;
+          patchValues['otros_especialistas'] = 0;
+          patchValues['anho_epi'] = new Date().getFullYear();
+          patchValues['semana_epi'] = 1;
+          patchValues['casos_dengue'] = 0;
+          patchValues['casos_anemia'] = 0;
+          patchValues['mort_materna'] = 0;
+          patchValues['casos_desnutricion'] = 0;
+          patchValues['iras_edas'] = 0;
+          patchValues['mortalidad_neonatal'] = 0;
+          patchValues['emergencia'] = false;
+          patchValues['uci'] = false;
+          patchValues['centro_quirurgico'] = false;
+          patchValues['partos'] = false;
+          patchValues['consultas_diarias_prom'] = 0;
+          patchValues['camas_ocupadas'] = 0;
+          patchValues['agua'] = false;
+          patchValues['desague'] = false;
+          patchValues['electricidad'] = false;
+          patchValues['oxigeno'] = false;
+          patchValues['internet'] = false;
+          patchValues['id_proyecto'] = 0;
+          patchValues['estado_inversion'] = '';
+          patchValues['avance_fisico'] = 0;
+          patchValues['avance_financiero'] = 0;
+          patchValues['monto_total'] = 0;
+          patchValues['monto_devengado'] = 0;
+          patchValues['unidad_ejecutora'] = '';
 
           this.form.patchValue(patchValues);
         },

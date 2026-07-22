@@ -256,6 +256,8 @@ model educacion_gore_condiciones_basicas {
 model equipamiento {
   id_equip                 Int                       @id @default(autoincrement())
   cod_modular              Int?
+  estado_infra             Int?
+  aulas_buenas             Int?
   mobiliario_optimo_porc   Decimal?                  @db.Decimal(5, 2)
   computadoras_total       Int?                      @default(0)
   tiene_internet           Boolean?                  @default(false)
@@ -316,8 +318,10 @@ model educacion_gore_recursos_humanos {
   total_matricula          Int?
   docentes_requeridos      Int
   docentes_asignados       Int
+  docentes_nombrados       Int?
   brecha_docente           Int?                      @default(dbgenerated("(docentes_requeridos - docentes_asignados)"))
   personal_administrativo  Int?                      @default(0)
+  tiene_psicologo          Boolean?                  @default(false)
   fecha_corte              DateTime                  @db.Date
   fecha_registro_sistema   DateTime?                 @default(now()) @db.Timestamp(6)
   instituciones_educativas instituciones_educativas? @relation(fields: [cod_modular], references: [cod_modular], onDelete: NoAction, onUpdate: NoAction)

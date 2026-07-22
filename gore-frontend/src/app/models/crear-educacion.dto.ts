@@ -18,7 +18,7 @@ export interface CrearEducacionDTO {
 
   centro_poblado: string;
 
-  cui_proyecto: string;
+  id_proyecto: number;
 
   estado_proyecto: string;
 

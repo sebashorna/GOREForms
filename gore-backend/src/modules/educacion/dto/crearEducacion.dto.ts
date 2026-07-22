@@ -26,7 +26,7 @@ export interface CrearEducacionDTO {
     // DIV 2 - PROYECTOS DE INVERSIÓN (INVIERTE.PE)
     // ============================
 
-    cui_proyecto: string;
+    id_proyecto: number;
 
     estado_proyecto: string;
 

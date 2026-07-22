@@ -54,7 +54,7 @@ export class Educacion {
     // DIV 2 - PROYECTOS DE INVERSIÓN (INVIERTE.PE)
     //==============================
 
-    cui_proyecto: [''],
+    id_proyecto: [0],
 
     estado_proyecto: [''],
 
@@ -139,47 +139,38 @@ export class Educacion {
 
           const patchValues: Record<string, any> = {};
 
-          // Institución
+          // Institución - solo información general se auto-llena
           if (ie) {
             patchValues['nombre_ie'] = ie.nombre_ie || '';
+            patchValues['dre'] = ie.dre || 'LAMBAYEQUE';
+            patchValues['ugel'] = ie.ugel || 'CHICLAYO';
             patchValues['nivel'] = ie.nivel || '';
+            patchValues['gestion'] = ie.gestion || 'Pública de gestión directa';
             patchValues['provincia'] = ie.provincia || '';
             patchValues['distrito'] = ie.distrito || '';
             patchValues['centro_poblado'] = ie.centro_poblado || '';
           }
 
-          // Equipamiento
-          if (eq) {
-            patchValues['estado_infra'] = Number(eq.estado_infra) || 0;
-            patchValues['aulas_buenas'] = Number(eq.aulas_buenas) || 0;
-            patchValues['mobiliario_optimo_porc'] = Number(eq.mobiliario_optimo_porc) || 0;
-            patchValues['computadoras_total'] = eq.computadoras_total ?? 0;
-            patchValues['servicio_agua'] = eq.servicio_agua || false;
-            patchValues['servicio_desague'] = eq.servicio_desague || false;
-            patchValues['servicio_luz'] = eq.servicio_luz || false;
-            patchValues['tiene_internet'] = eq.tiene_internet || false;
-            patchValues['riesgo_critico'] = eq.riesgo_critico || false;
-          }
-
-          // Recursos Humanos
-          if (rh) {
-            patchValues['total_matricula'] = rh.total_matricula ?? 0;
-            patchValues['docentes_requeridos'] = rh.docentes_requeridos ?? 0;
-            patchValues['docentes_nombrados'] = rh.docentes_nombrados ?? 0;
-            patchValues['docentes_contratados'] = rh.docentes_contratados ?? 0;
-            patchValues['personal_admin'] = rh.personal_administrativo ?? 0;
-            patchValues['tiene_psicologo'] = rh.tiene_psicologo ? 'SI' : '';
-          }
-
-          // Condiciones Básicas (ya incluidas en equipamiento)
-
-          // Proyecto de Infraestructura
-          if (pr) {
-            patchValues['cui_proyecto'] = pr.cui_proyecto || '';
-            patchValues['estado_proyecto'] = pr.estado_proyecto || '';
-            patchValues['avance_fisico'] = Number(pr.avance_fisico) || 0;
-            patchValues['monto_total'] = Number(pr.monto_total) || 0;
-          }
+          // Limpiar campos que deben ser siempre nuevos
+          patchValues['estado_infra'] = 0;
+          patchValues['aulas_buenas'] = 0;
+          patchValues['mobiliario_optimo_porc'] = 0;
+          patchValues['computadoras_total'] = 0;
+          patchValues['tiene_internet'] = false;
+          patchValues['servicio_agua'] = false;
+          patchValues['servicio_desague'] = false;
+          patchValues['servicio_luz'] = false;
+          patchValues['riesgo_critico'] = false;
+          patchValues['total_matricula'] = 0;
+          patchValues['docentes_requeridos'] = 0;
+          patchValues['docentes_nombrados'] = 0;
+          patchValues['docentes_contratados'] = 0;
+          patchValues['personal_admin'] = 0;
+          patchValues['tiene_psicologo'] = '';
+          patchValues['id_proyecto'] = 0;
+          patchValues['estado_proyecto'] = '';
+          patchValues['avance_fisico'] = 0;
+          patchValues['monto_total'] = 0;
 
           this.form.patchValue(patchValues);
         },
@@ -275,7 +266,7 @@ export class Educacion {
       provincia: rawValues.provincia || '',
       distrito: rawValues.distrito || '',
       centro_poblado: rawValues.centro_poblado || '',
-      cui_proyecto: rawValues.cui_proyecto || '',
+      id_proyecto: Number(rawValues.id_proyecto),
       estado_proyecto: rawValues.estado_proyecto || '',
       avance_fisico: Number(rawValues.avance_fisico),
       monto_total: Number(rawValues.monto_total),
@@ -380,7 +371,7 @@ export class Educacion {
       provincia: '',
       distrito: '',
       centro_poblado: '',
-      cui_proyecto: '',
+      id_proyecto: 0,
       estado_proyecto: '',
       avance_fisico: 0,
       monto_total: 0,

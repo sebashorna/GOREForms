@@ -19,12 +19,29 @@ const sql2 = `
   WHERE dre IS NULL OR ugel IS NULL OR gestion IS NULL OR centro_poblado IS NULL;
 `;
 
+const sql3 = `
+  ALTER TABLE educacion_gore.equipamiento
+  ADD COLUMN IF NOT EXISTS estado_infra INT,
+  ADD COLUMN IF NOT EXISTS aulas_buenas INT;
+`;
+
+const sql5 = `
+  ALTER TABLE educacion_gore.recursos_humanos
+  ADD COLUMN IF NOT EXISTS docentes_nombrados INT,
+  ADD COLUMN IF NOT EXISTS total_matricula INT,
+  ADD COLUMN IF NOT EXISTS tiene_psicologo BOOLEAN;
+`;
+
 prisma.$executeRawUnsafe(sql1)
   .then(() => {
     console.log('Columnas agregadas correctamente');
     return prisma.$executeRawUnsafe(sql2);
   })
   .then(() => console.log('Datos actualizados correctamente'))
+  .then(() => prisma.$executeRawUnsafe(sql3))
+  .then(() => console.log('Columnas de equipamiento agregadas correctamente'))
+  .then(() => prisma.$executeRawUnsafe(sql5))
+  .then(() => console.log('Columnas de recursos_humanos agregadas correctamente'))
   .then(() => console.log('SQL ejecutado correctamente'))
   .catch(err => console.error('Error:', err))
   .finally(() => prisma.$disconnect());

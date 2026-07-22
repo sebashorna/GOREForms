@@ -70,6 +70,8 @@ class EducacionRepository {
 
             await this.guardarEquipamiento(tx, dto);
 
+            await this.guardarCondicionesBasicas(tx, dto);
+
             await this.guardarRecursosHumanos(tx, dto);
 
             await this.guardarHistorial(tx, dto);
@@ -133,11 +135,29 @@ class EducacionRepository {
                 aulas_buenas: dto.aulas_buenas,
                 mobiliario_optimo_porc: dto.mobiliario_optimo_porc,
                 computadoras_total: dto.computadoras_total,
+                tiene_internet: dto.tiene_internet,
+                fecha_corte: dto.fecha_corte
+            }
+        });
+
+    }
+
+    private async guardarCondicionesBasicas(
+        tx: Prisma.TransactionClient,
+        dto: CrearEducacionDTO
+    ) {
+
+        await tx.educacion_gore_condiciones_basicas.deleteMany({
+            where: { cod_modular: dto.cod_modular, fecha_corte: dto.fecha_corte }
+        });
+
+        await tx.educacion_gore_condiciones_basicas.create({
+            data: {
+                cod_modular: dto.cod_modular,
                 servicio_agua: dto.servicio_agua,
                 servicio_desague: dto.servicio_desague,
-                servicio_luz: dto.servicio_luz,
-                tiene_internet: dto.tiene_internet,
-                riesgo_critico: dto.riesgo_critico,
+                servicio_electricidad: dto.servicio_luz,
+                estado_critico_infra: dto.riesgo_critico,
                 fecha_corte: dto.fecha_corte
             }
         });
@@ -149,7 +169,7 @@ class EducacionRepository {
         dto: CrearEducacionDTO
     ) {
 
-        if (!dto.cui_proyecto || dto.cui_proyecto.trim() === '') {
+        if (!dto.id_proyecto) {
             return;
         }
 
@@ -158,7 +178,7 @@ class EducacionRepository {
         await tx.proyectos_infraestructura.create({
             data: {
                 cod_modular: dto.cod_modular,
-                cui_proyecto: dto.cui_proyecto,
+                id_proyecto: dto.id_proyecto,
                 estado_proyecto: dto.estado_proyecto,
                 avance_fisico: dto.avance_fisico,
                 monto_total: dto.monto_total,
@@ -181,7 +201,7 @@ class EducacionRepository {
                 total_matricula: dto.total_matricula,
                 docentes_requeridos: dto.docentes_requeridos,
                 docentes_nombrados: dto.docentes_nombrados,
-                docentes_contratados: dto.docentes_contratados,
+                docentes_asignados: dto.docentes_contratados,
                 personal_administrativo: dto.personal_admin,
                 tiene_psicologo: dto.tiene_psicologo,
                 fecha_corte: dto.fecha_corte
