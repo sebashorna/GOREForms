@@ -9,18 +9,21 @@
 
 <form [formGroup]="form" (ngSubmit)="guardarReporte()" class="main-form-container" id="Educacion">
 
+    <!-- ==================================================== -->
+    <!-- IDENTIFICACIÓN DE LA INSTITUCIÓN EDUCATIVA -->
+    <!-- ==================================================== -->
     <div class="form-container">
         <div class="section-header">
             <h3>📋 Identificación de la Institución Educativa</h3>
         </div>
         <div class="form-grid">
-            <div class="form-group">
+            <div class="form-group full-width">
                 <label for="cod_modular">Código Modular</label>
                 <input type="number" id="cod_modular" formControlName="cod_modular" (input)="handleIdInput()" (blur)="buscarInstitucion()" min="1" step="1" />
                 <div class="field-message warning" *ngIf="codModularMensaje">{{ codModularMensaje }}</div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group full-width">
                 <label for="nombre_ie">Nombre de la I.E.</label>
                 <input type="text" id="nombre_ie" formControlName="nombre_ie" />
             </div>
@@ -46,15 +49,18 @@
                     <option value="Inicial">Inicial</option>
                     <option value="Primaria">Primaria</option>
                     <option value="Secundaria">Secundaria</option>
-                    <option value="Básica Especial">Básica Especial</option>
-                    <option value="Técnico-Productiva">Técnico-Productiva</option>
-                    <option value="Superior">Superior</option>
+                    <option value="Inicial - Primaria">Inicial - Primaria</option>
+                    <option value="Primaria - Secundaria">Primaria - Secundaria</option>
+                    <option value="Inicial - Primaria - Secundaria">Inicial - Primaria - Secundaria</option>
+                    <option value="Superior No Universitario">Superior No Universitario</option>
+                    <option value="Superior Universitario">Superior Universitario</option>
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="gestion">Tipo de Gestión</label>
                 <select id="gestion" formControlName="gestion">
+                    <option value="">Seleccione Gestión</option>
                     <option value="Pública de gestión directa">Pública de gestión directa</option>
                     <option value="Pública de gestión privada">Pública de gestión privada</option>
                     <option value="Privada">Privada</option>
@@ -78,95 +84,112 @@
         </div>
     </div>
 
+    <!-- ==================================================== -->
+    <!-- PROYECTOS DE INVERSIÓN (INVIERTE.PE) -->
+    <!-- ==================================================== -->
     <div class="form-container">
         <div class="section-header">
-            <h3>🏗️ Proyectos de Inversión (Invierte.pe)</h3>
+            <h3>🏗️ Proyectos de Inversión (INVIERTE.PE)</h3>
         </div>
         <div class="form-grid">
-            <div class="form-group">
-                <label for="cui_proyecto">CUI (Código Único de Inversión)</label>
+            <div class="form-group full-width">
+                <label for="cui_proyecto">CUI</label>
                 <input type="text" id="cui_proyecto" formControlName="cui_proyecto" />
             </div>
 
             <div class="form-group">
                 <label for="estado_proyecto">Estado del Proyecto</label>
                 <select id="estado_proyecto" formControlName="estado_proyecto">
-                    <option value="Sin Proyecto">Sin Proyecto</option>
-                    <option value="Idea">Idea</option>
-                    <option value="Expediente Técnico">Expediente Técnico</option>
-                    <option value="Ejecución">Ejecución</option>
-                    <option value="Paralizada">Paralizada</option>
-                    <option value="Culminada">Culminada</option>
+                    <option value="">Seleccione Estado</option>
+                    <option value="En Ejecución">En Ejecución</option>
+                    <option value="Aprobado">Aprobado</option>
+                    <option value="Viable">Viable</option>
+                    <option value="Paralizado">Paralizado</option>
+                    <option value="Concluido">Concluido</option>
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="avance_fisico">Avance Físico (%)</label>
-                <input type="number" id="avance_fisico" formControlName="avance_fisico" min="0" max="100" step="0.01" value="0" />
+                <input type="number" id="avance_fisico" formControlName="avance_fisico" min="0" max="100" />
+                <div class="field-message" *ngIf="form.get('avance_fisico')?.invalid && form.get('avance_fisico')?.touched">
+                    Ingrese un número válido entre 0 y 100.
+                </div>
             </div>
 
             <div class="form-group">
-                <label for="monto_total">Monto Total Inversión (S/)</label>
-                <input type="number" id="monto_total" formControlName="monto_total" step="0.01" value="0" />
+                <label for="monto_total">Monto Total Inversión</label>
+                <input type="number" id="monto_total" formControlName="monto_total" />
             </div>
         </div>
     </div>
 
+    <!-- ==================================================== -->
+    <!-- INFRAESTRUCTURA Y EQUIPAMIENTO -->
+    <!-- ==================================================== -->
     <div class="form-container">
         <div class="section-header">
-            <h3>🏢 Condiciones de Infraestructura y Equipamiento</h3>
+            <h3>🏢 Infraestructura y Equipamiento</h3>
         </div>
         <div class="form-grid">
             <div class="form-group">
-                <label for="estado_infra">Estado de Infraestructura (1-5)</label>
-                <input type="number" id="estado_infra" formControlName="estado_infra" min="1" max="5" />
+                <label for="estado_infra">Estado Infraestructura</label>
+                <input type="number" id="estado_infra" formControlName="estado_infra" />
             </div>
 
             <div class="form-group">
                 <label for="aulas_buenas">Aulas en Buen Estado</label>
-                <input type="number" id="aulas_buenas" formControlName="aulas_buenas" value="0" />
+                <input type="number" id="aulas_buenas" formControlName="aulas_buenas" />
             </div>
 
             <div class="form-group">
                 <label for="mobiliario_optimo_porc">Mobiliario Óptimo (%)</label>
-                <input type="number" id="mobiliario_optimo_porc" formControlName="mobiliario_optimo_porc" min="0" max="100" step="0.01" value="0" />
+                <input type="number" id="mobiliario_optimo_porc" formControlName="mobiliario_optimo_porc" min="0" max="100" step="1" />
+                <div class="field-message" *ngIf="form.get('mobiliario_optimo_porc')?.invalid && form.get('mobiliario_optimo_porc')?.touched">
+                    Ingrese un número válido entre 0 y 100.
+                </div>
             </div>
 
             <div class="form-group">
-                <label for="computadoras_total">Total Laptops / Computadoras</label>
-                <input type="number" id="computadoras_total" formControlName="computadoras_total" value="0" />
+                <label for="computadoras_total">Total Computadoras</label>
+                <input type="number" id="computadoras_total" formControlName="computadoras_total" />
             </div>
         </div>
 
-        <label style="display: block; margin-top: 15px; padding-left: 20px; font-weight: bold; color: #555;">Servicios Básicos:</label>
-        <div class="form-grid" style="margin-top: 10px;">
-            <div class="checkbox-group">
-                <input type="checkbox" id="servicio_agua" formControlName="servicio_agua" />
-                <label for="servicio_agua">Conexión de Agua</label>
-            </div>
+        <div class="checkbox-section">
+            <label class="checkbox-section-title">Servicios Básicos y Riesgos</label>
+            <div class="checkbox-grid">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="servicio_agua" formControlName="servicio_agua" [value]="'SI'" />
+                    <label for="servicio_agua">Servicio Agua</label>
+                </div>
 
-            <div class="checkbox-group">
-                <input type="checkbox" id="servicio_desague" formControlName="servicio_desague" />
-                <label for="servicio_desague">Desagüe / Pozo</label>
-            </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="servicio_desague" formControlName="servicio_desague" [value]="'SI'" />
+                    <label for="servicio_desague">Servicio Desagüe</label>
+                </div>
 
-            <div class="checkbox-group">
-                <input type="checkbox" id="servicio_luz" formControlName="servicio_luz" />
-                <label for="servicio_luz">Electricidad</label>
-            </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="servicio_luz" formControlName="servicio_luz" [value]="'SI'" />
+                    <label for="servicio_luz">Servicio Luz</label>
+                </div>
 
-            <div class="checkbox-group">
-                <input type="checkbox" id="tiene_internet" formControlName="tiene_internet" />
-                <label for="tiene_internet">Internet Operativo</label>
-            </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="tiene_internet" formControlName="tiene_internet" [value]="'SI'" />
+                    <label for="tiene_internet">Internet Operativo</label>
+                </div>
 
-            <div class="checkbox-group" style="background: #fff5f5; border: 1px dashed #e74c3c;">
-                <input type="checkbox" id="riesgo_critico" formControlName="riesgo_critico" />
-                <label for="riesgo_critico" style="color: #e74c3c; font-weight: bold;">⚠️ RIESGO DE DERRUMBE</label>
+                <div class="checkbox-group" style="background: #fff5f5; border: 1px dashed #e74c3c; padding: 10px; border-radius: 4px;">
+                    <input type="checkbox" id="riesgo_critico" formControlName="riesgo_critico" [value]="'SI'" />
+                    <label for="riesgo_critico" style="color: #e74c3c; font-weight: bold;">Riesgo de Derrumbe</label>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- ==================================================== -->
+    <!-- PERSONAL DOCENTE Y ADMINISTRATIVO -->
+    <!-- ==================================================== -->
     <div class="form-container">
         <div class="section-header">
             <h3>👥 Personal Docente y Administrativo</h3>
@@ -178,42 +201,46 @@
             </div>
 
             <div class="form-group">
-                <label for="docentes_requeridos">Docentes Requeridos (CAP)</label>
+                <label for="docentes_requeridos">Docentes Requeridos</label>
                 <input type="number" id="docentes_requeridos" formControlName="docentes_requeridos" />
             </div>
 
             <div class="form-group">
                 <label for="docentes_nombrados">Docentes Nombrados</label>
-                <input type="number" id="docentes_nombrados" formControlName="docentes_nombrados" value="0" />
+                <input type="number" id="docentes_nombrados" formControlName="docentes_nombrados" />
             </div>
 
             <div class="form-group">
                 <label for="docentes_contratados">Docentes Contratados</label>
-                <input type="number" id="docentes_contratados" formControlName="docentes_contratados" value="0" />
+                <input type="number" id="docentes_contratados" formControlName="docentes_contratados" />
             </div>
 
             <div class="form-group">
                 <label for="personal_admin">Personal Administrativo</label>
-                <input type="number" id="personal_admin" formControlName="personal_admin" value="0" />
+                <input type="number" id="personal_admin" formControlName="personal_admin" />
             </div>
 
             <div class="form-group">
-                <label for="tiene_psicologo">¿Psicólogo en la I.E.?</label>
+                <label for="tiene_psicologo">Psicólogo en la I.E.</label>
                 <select id="tiene_psicologo" formControlName="tiene_psicologo">
-                    <option value="NO">NO</option>
-                    <option value="SI">SÍ</option>
+                    <option value="">Seleccione</option>
+                    <option value="SI">Sí</option>
+                    <option value="NO">No</option>
                 </select>
             </div>
         </div>
     </div>
 
+    <!-- ==================================================== -->
+    <!-- METADATOS -->
+    <!-- ==================================================== -->
     <div class="form-container">
         <div class="section-header">
-            <h3>📅 Registro Temporal</h3>
+            <h3>📅 Metadatos</h3>
         </div>
         <div class="form-grid">
             <div class="form-group full-width">
-                <label for="fecha_corte">Fecha de Corte de Información</label>
+                <label for="fecha_corte">Fecha de Corte</label>
                 <input type="date" id="fecha_corte" formControlName="fecha_corte" [attr.min]="minDate" />
                 <div class="field-message" *ngIf="form.get('fecha_corte')?.hasError('invalidDate') && form.get('fecha_corte')?.touched">
                     La fecha de corte debe ser mayor al día de hoy.

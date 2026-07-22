@@ -69,6 +69,11 @@
             </div>
 
             <div class="form-group">
+                <label for="poblacion_asignada">Población asignada</label>
+                <input type="number" id="poblacion_asignada" formControlName="poblacion_asignada" min="0" step="1" />
+            </div>
+
+            <div class="form-group">
                 <label for="coor_latitud">Latitud</label>
                 <input type="text" id="coor_lat" formControlName="coord_lat" />
             </div>
@@ -163,14 +168,6 @@
             <div class="form-group">
                 <label for="Hospitalarias">Camas Hospitalarias</label>
                 <input type="number" id="camas_hospitalarias" formControlName="camas_hospitalarias" />
-            </div>
-
-            <div class="form-group">
-                <label for="AvanceF">Avance de Equipamiento (%)</label>
-                <input type="number" id="avance_equipamiento" formControlName="avance_equipamiento" min="0" max="100" step="1" />
-                <div class="field-message" *ngIf="form.get('avance_equipamiento')?.invalid && form.get('avance_equipamiento')?.touched">
-                    Ingrese un número válido entre 0 y 100.
-                </div>
             </div>
 
             <div class="form-group">

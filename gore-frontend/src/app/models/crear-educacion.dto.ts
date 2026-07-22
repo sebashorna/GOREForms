@@ -1,83 +1,61 @@
 export interface CrearEducacionDTO {
 
-    // ============================
-    // Identificación de la I.E.
-    // ============================
+  cod_modular: number;
 
-    cod_modular: number;
+  nombre_ie: string;
 
-    nombre_ie: string;
+  dre: string;
 
-    dre: string;
+  ugel: string;
 
-    ugel: string;
+  nivel: string;
 
-    nivel: string;
+  gestion: string;
 
-    gestion: string;
+  provincia: string;
 
-    provincia: string;
+  distrito: string;
 
-    distrito: string;
+  centro_poblado: string;
 
-    centro_poblado?: string;
+  cui_proyecto: string;
 
-    // ============================
-    // Proyectos de Inversión
-    // ============================
+  estado_proyecto: string;
 
-    cui_proyecto?: string;
+  avance_fisico: number;
 
-    estado_proyecto: string;
+  monto_total: number;
 
-    avance_fisico: number;
+  estado_infra: number;
 
-    monto_total: number;
+  aulas_buenas: number;
 
-    // ============================
-    // Infraestructura y Equipamiento
-    // ============================
+  mobiliario_optimo_porc: number;
 
-    estado_infra: number;
+  computadoras_total: number;
 
-    aulas_buenas: number;
+  servicio_agua: boolean;
 
-    mobiliario_optimo_porc: number;
+  servicio_desague: boolean;
 
-    computadoras_total: number;
+  servicio_luz: boolean;
 
-    servicio_agua: boolean;
+  tiene_internet: boolean;
 
-    servicio_desague: boolean;
+  riesgo_critico: boolean;
 
-    servicio_luz: boolean;
+  total_matricula: number;
 
-    tiene_internet: boolean;
+  docentes_requeridos: number;
 
-    riesgo_critico: boolean;
+  docentes_nombrados: number;
 
-    // ============================
-    // Personal Docente y Administrativo
-    // ============================
+  docentes_contratados: number;
 
-    total_matricula: number;
+  personal_admin: number;
 
-    docentes_requeridos: number;
+  tiene_psicologo: boolean;
 
-    docentes_nombrados: number;
-
-    docentes_contratados: number;
-
-    personal_admin: number;
-
-    tiene_psicologo: string;
-
-    // ============================
-    // Común
-    // ============================
-
-    fecha_corte: Date;
-
-    id_usuario?: number;
+  fecha_corte: Date;
 
 }

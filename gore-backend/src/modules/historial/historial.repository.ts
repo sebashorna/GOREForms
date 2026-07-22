@@ -39,7 +39,7 @@ class HistorialRepository {
             };
         }
 
-        const registros = await prisma.historial.findMany({
+        const registros = await (prisma.historial.findMany as any)({
             where,
             include: {
                 establecimientos: {
@@ -47,9 +47,6 @@ class HistorialRepository {
                 },
                 instituciones_educativas: {
                     select: { nombre_ie: true }
-                },
-                usuarios: {
-                    select: { usuario: true }
                 }
             },
             orderBy: {
@@ -58,26 +55,31 @@ class HistorialRepository {
         });
 
         // Transformar los resultados
-        const resultados = registros.map(r => {
-            const nombre = r.tipo === 'salud'
-                ? r.establecimientos?.nombre_eess
-                : r.instituciones_educativas?.nombre_ie;
-
+        const resultados = registros.map((r: any) => {
+            const historial = r as any;
             const tipo = r.tipo === 'salud' ? 'Salud' : 'Educación';
+            
+            // Obtener el nombre según el tipo
+            let nombre = historial.referencia || '—';
+            if (r.tipo === 'salud' && r.establecimientos?.nombre_eess) {
+                nombre = r.establecimientos.nombre_eess;
+            } else if (r.tipo === 'educacion' && r.instituciones_educativas?.nombre_ie) {
+                nombre = r.instituciones_educativas.nombre_ie;
+            }
 
             return {
                 id_historial: r.id_historial,
-                nombre: nombre || '—',
+                nombre: nombre,
                 tipo,
                 fecha_modificacion: r.fecha_modificacion_historial,
-                usuario: r.usuarios?.usuario || '—'
+                usuario: historial.nombre_usuario || '—'
             };
         });
 
         // Filtro de búsqueda por nombre (post-query porque viene de relaciones)
         if (filtros.busqueda) {
             const term = filtros.busqueda.toLowerCase();
-            return resultados.filter(r =>
+            return resultados.filter((r: any) =>
                 r.nombre.toLowerCase().includes(term)
             );
         }

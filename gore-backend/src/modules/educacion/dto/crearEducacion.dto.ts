@@ -1,7 +1,7 @@
 export interface CrearEducacionDTO {
 
     // ============================
-    // Identificación de la I.E.
+    // DIV 1 - IDENTIFICACIÓN DE LA INSTITUCIÓN EDUCATIVA
     // ============================
 
     cod_modular: number;
@@ -20,13 +20,13 @@ export interface CrearEducacionDTO {
 
     distrito: string;
 
-    centro_poblado?: string;
+    centro_poblado: string;
 
     // ============================
-    // Proyectos de Inversión
+    // DIV 2 - PROYECTOS DE INVERSIÓN (INVIERTE.PE)
     // ============================
 
-    cui_proyecto?: string;
+    cui_proyecto: string;
 
     estado_proyecto: string;
 
@@ -35,7 +35,7 @@ export interface CrearEducacionDTO {
     monto_total: number;
 
     // ============================
-    // Infraestructura y Equipamiento
+    // DIV 3 - INFRAESTRUCTURA Y EQUIPAMIENTO
     // ============================
 
     estado_infra: number;
@@ -57,7 +57,7 @@ export interface CrearEducacionDTO {
     riesgo_critico: boolean;
 
     // ============================
-    // Personal Docente y Administrativo
+    // DIV 4 - PERSONAL DOCENTE Y ADMINISTRATIVO
     // ============================
 
     total_matricula: number;
@@ -70,14 +70,12 @@ export interface CrearEducacionDTO {
 
     personal_admin: number;
 
-    tiene_psicologo: string;
+    tiene_psicologo: boolean;
 
     // ============================
-    // Común
+    // DIV 5 - METADATOS
     // ============================
 
     fecha_corte: Date;
-
-    nombre_usuario: string;
 
 }

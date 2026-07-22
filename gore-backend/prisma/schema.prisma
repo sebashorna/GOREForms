@@ -279,6 +279,10 @@ model instituciones_educativas {
   total_estudiantes            Int?                                 @default(0)
   fecha_registro_sistema       DateTime?                            @default(now()) @db.Timestamp(6)
   fecha_modificacion_educacion DateTime?                            @db.Timestamp(6)
+  dre                          String?                              @db.VarChar(50)
+  ugel                         String?                              @db.VarChar(50)
+  gestion                      String?                              @db.VarChar(100)
+  centro_poblado               String?                              @db.VarChar(100)
   condiciones_basicas          educacion_gore_condiciones_basicas[]
   equipamiento                 equipamiento[]
   proyectos_infraestructura    proyectos_infraestructura[]
@@ -309,6 +313,7 @@ model proyectos_infraestructura {
 model educacion_gore_recursos_humanos {
   id_rh                    Int                       @id @default(autoincrement())
   cod_modular              Int?
+  total_matricula          Int?
   docentes_requeridos      Int
   docentes_asignados       Int
   brecha_docente           Int?                      @default(dbgenerated("(docentes_requeridos - docentes_asignados)"))

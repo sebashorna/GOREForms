@@ -46,7 +46,7 @@ class HistorialController {
 
         } catch (error) {
 
-            console.error(error);
+            console.error("Error en historial:", error);
 
             return fail(
                 res,

@@ -36,8 +36,6 @@ export interface CrearSaludDTO {
 
   unidad_ejecutora: string;
 
-  avance_equipamiento: number;
-
   camas_uci_tot: number;
 
   camas_uci_disp: number;

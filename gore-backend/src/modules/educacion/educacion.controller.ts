@@ -11,8 +11,7 @@ class EducacionController {
         try {
 
             console.log('POST /api/educacion body:', JSON.stringify(req.body));
-            const usuarioId = (req as any).usuario?.id_usuario;
-            const proyecto = await service.crear({ ...req.body, id_usuario: usuarioId });
+            const proyecto = await service.crear(req.body);
 
             return success(
                 res,
@@ -30,12 +29,9 @@ class EducacionController {
                 console.error('Error details:', JSON.stringify(err, Object.getOwnPropertyNames(err)));
             }
 
-            const errorMessage = err instanceof Error ? err.message : "No fue posible registrar el formulario.";
-
             return fail(
                 res,
-                `Error: ${errorMessage}`,
-                500
+                "No fue posible registrar el formulario."
             );
 
         }

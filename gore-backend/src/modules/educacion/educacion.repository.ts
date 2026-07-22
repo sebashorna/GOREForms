@@ -72,8 +72,6 @@ class EducacionRepository {
 
             await this.guardarRecursosHumanos(tx, dto);
 
-            await this.guardarCondiciones(tx, dto);
-
             await this.guardarHistorial(tx, dto);
 
             return {
@@ -97,18 +95,24 @@ class EducacionRepository {
             create: {
                 cod_modular: dto.cod_modular,
                 nombre_ie: dto.nombre_ie,
+                dre: dto.dre,
+                ugel: dto.ugel,
                 nivel: dto.nivel,
+                gestion: dto.gestion,
                 provincia: dto.provincia,
                 distrito: dto.distrito,
-                total_estudiantes: dto.total_matricula,
+                centro_poblado: dto.centro_poblado,
                 fecha_modificacion_educacion: new Date(),
             },
             update: {
                 nombre_ie: dto.nombre_ie,
+                dre: dto.dre,
+                ugel: dto.ugel,
                 nivel: dto.nivel,
+                gestion: dto.gestion,
                 provincia: dto.provincia,
                 distrito: dto.distrito,
-                total_estudiantes: dto.total_matricula,
+                centro_poblado: dto.centro_poblado,
                 fecha_modificacion_educacion: new Date(),
             },
         });
@@ -125,10 +129,15 @@ class EducacionRepository {
         await tx.equipamiento.create({
             data: {
                 cod_modular: dto.cod_modular,
+                estado_infra: dto.estado_infra,
+                aulas_buenas: dto.aulas_buenas,
                 mobiliario_optimo_porc: dto.mobiliario_optimo_porc,
                 computadoras_total: dto.computadoras_total,
+                servicio_agua: dto.servicio_agua,
+                servicio_desague: dto.servicio_desague,
+                servicio_luz: dto.servicio_luz,
                 tiene_internet: dto.tiene_internet,
-                tiene_laboratorio: false,
+                riesgo_critico: dto.riesgo_critico,
                 fecha_corte: dto.fecha_corte
             }
         });
@@ -144,30 +153,15 @@ class EducacionRepository {
             return;
         }
 
-        const idProyecto = parseInt(dto.cui_proyecto) || 0;
+        await tx.proyectos_infraestructura.deleteMany({ where: { cod_modular: dto.cod_modular, fecha_corte: dto.fecha_corte } });
 
-        await tx.proyectos_infraestructura.upsert({
-            where: {
-                id_proyecto: idProyecto
-            },
-            create: {
-                id_proyecto: idProyecto,
+        await tx.proyectos_infraestructura.create({
+            data: {
                 cod_modular: dto.cod_modular,
-                estado_proyecto: dto.estado_proyecto,
-                tipo_obra: "",
-                unidad_ejecutora: "",
-                avance_fisico: dto.avance_fisico,
-                avance_financiero: dto.avance_fisico,
-                monto_total: dto.monto_total,
-                monto_devengado: dto.monto_total,
-                fecha_corte: dto.fecha_corte
-            },
-            update: {
+                cui_proyecto: dto.cui_proyecto,
                 estado_proyecto: dto.estado_proyecto,
                 avance_fisico: dto.avance_fisico,
-                avance_financiero: dto.avance_fisico,
                 monto_total: dto.monto_total,
-                monto_devengado: dto.monto_total,
                 fecha_corte: dto.fecha_corte
             }
         });
@@ -184,9 +178,12 @@ class EducacionRepository {
         await tx.educacion_gore_recursos_humanos.create({
             data: {
                 cod_modular: dto.cod_modular,
+                total_matricula: dto.total_matricula,
                 docentes_requeridos: dto.docentes_requeridos,
-                docentes_asignados: dto.docentes_nombrados + dto.docentes_contratados,
+                docentes_nombrados: dto.docentes_nombrados,
+                docentes_contratados: dto.docentes_contratados,
                 personal_administrativo: dto.personal_admin,
+                tiene_psicologo: dto.tiene_psicologo,
                 fecha_corte: dto.fecha_corte
             }
         });
@@ -198,35 +195,16 @@ class EducacionRepository {
         dto: CrearEducacionDTO
     ) {
         const historialData: any = {
+            cod_modular: dto.cod_modular,
             tipo: "educacion",
-            referencia: dto.nombre_ie,
-            nombre_usuario: dto.nombre_usuario,
-            fecha_modificacion_historial: new Date()
+            referencia: String(dto.cod_modular),
+            nombre_usuario: "Sistema",
+            fecha_modificacion_historial: new Date(),
         };
-
+        
         await tx.historial.create({
             data: historialData
         });
-    }
-
-    private async guardarCondiciones(
-        tx: Prisma.TransactionClient,
-        dto: CrearEducacionDTO
-    ) {
-
-        await tx.educacion_gore_condiciones_basicas.deleteMany({ where: { cod_modular: dto.cod_modular, fecha_corte: dto.fecha_corte } });
-
-        await tx.educacion_gore_condiciones_basicas.create({
-            data: {
-                cod_modular: dto.cod_modular,
-                servicio_agua: dto.servicio_agua,
-                servicio_desague: dto.servicio_desague,
-                servicio_electricidad: dto.servicio_luz,
-                estado_critico_infra: dto.riesgo_critico,
-                fecha_corte: dto.fecha_corte
-            }
-        });
-
     }
 
 }

@@ -66,7 +66,7 @@ class SaludRepository {
         return {
             establecimiento,
             equipamiento,
-            recursosHumanos: recursosHumanos,
+            recursos_humanos: recursosHumanos,
             epidemiologia,
             servicios,
             condiciones_basicas: condiciones,
@@ -313,7 +313,7 @@ class SaludRepository {
                 fecha_corte: dto.fecha_corte,
             },
             update: {
-                id_servicios: dto.id_renaes,
+                id_renaes: dto.id_renaes,
                 emergencia: dto.emergencia,
                 uci: dto.uci,
                 centro_quirurgico: dto.centro_quirurgico,
@@ -347,7 +347,6 @@ class SaludRepository {
                 fecha_corte: dto.fecha_corte,
             },
             update: {
-                id_condiciones: dto.id_renaes,
                 id_renaes: dto.id_renaes,
                 agua: dto.agua,
                 desague: dto.desague,
@@ -364,12 +363,11 @@ class SaludRepository {
         dto: CrearSaludDTO
     ) {
         const historialData: any = {
+            id_renaes: dto.id_renaes,
             tipo: "salud",
-            referencia: dto.nombre_eess,
-            nombre_usuario: dto.nombre_usuario,
-            fecha_modificacion_historial: new Date()
+            fecha_modificacion_historial: new Date(),
         };
-
+        
         await tx.historial.create({
             data: historialData
         });

@@ -27,7 +27,7 @@ export class Educacion {
 
   form = this.fb.group({
     //==============================
-    // IDENTIFICACIÓN DE LA I.E.
+    // DIV 1 - IDENTIFICACIÓN DE LA INSTITUCIÓN EDUCATIVA
     //==============================
 
     cod_modular: ['', [Validators.required, Validators.pattern(/^\d{1,8}$/)]],
@@ -49,19 +49,19 @@ export class Educacion {
     centro_poblado: [''],
 
     //==============================
-    // PROYECTOS DE INVERSIÓN
+    // DIV 2 - PROYECTOS DE INVERSIÓN (INVIERTE.PE)
     //==============================
 
     cui_proyecto: [''],
 
-    estado_proyecto: ['Sin Proyecto'],
+    estado_proyecto: [''],
 
     avance_fisico: [0, [Validators.min(0), Validators.max(100)]],
 
     monto_total: [0],
 
     //==============================
-    // INFRAESTRUCTURA Y EQUIPAMIENTO
+    // DIV 3 - INFRAESTRUCTURA Y EQUIPAMIENTO
     //==============================
 
     estado_infra: [0],
@@ -83,7 +83,7 @@ export class Educacion {
     riesgo_critico: [false],
 
     //==============================
-    // PERSONAL DOCENTE Y ADMINISTRATIVO
+    // DIV 4 - PERSONAL DOCENTE Y ADMINISTRATIVO
     //==============================
 
     total_matricula: [0],
@@ -96,74 +96,14 @@ export class Educacion {
 
     personal_admin: [0],
 
-    tiene_psicologo: ['NO'],
+    tiene_psicologo: [''],
 
     //==============================
-    // FECHA
+    // DIV 5 - METADATOS
     //==============================
 
     fecha_corte: ['', Validators.required],
   });
-
-  // initialize reactive cross-field validations
-  private _init = this.setupValidators();
-
-  private setupValidators(): void {
-    // docentes asignados <= docentes requeridos
-    this.form.get('docentes_requeridos')?.valueChanges.subscribe(() => this.checkDocentes());
-    this.form.get('docentes_nombrados')?.valueChanges.subscribe(() => this.checkDocentes());
-    this.form.get('docentes_contratados')?.valueChanges.subscribe(() => this.checkDocentes());
-
-    // fecha debe ser mayor a hoy
-    this.form.get('fecha_corte')?.valueChanges.subscribe(() => this.checkFecha());
-  }
-
-  private checkDocentes(): void {
-    const req = Number(this.form.get('docentes_requeridos')?.value) || 0;
-    const nombrados = Number(this.form.get('docentes_nombrados')?.value) || 0;
-    const contratados = Number(this.form.get('docentes_contratados')?.value) || 0;
-    const totalAsignados = nombrados + contratados;
-    const control = this.form.get('docentes_requeridos');
-    if (totalAsignados > req && req > 0) {
-      control?.setErrors({ maxExceeded: true });
-    } else {
-      if (control?.hasError('maxExceeded')) {
-        control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
-        const errors = control.errors;
-        if (errors) {
-          delete errors['maxExceeded'];
-          if (Object.keys(errors).length === 0) control.setErrors(null);
-          else control.setErrors(errors);
-        }
-      }
-    }
-  }
-
-  private checkFecha(): void {
-    const raw = this.form.get('fecha_corte')?.value;
-    const parsed = this.parseDate(raw);
-    const control = this.form.get('fecha_corte');
-    if (!parsed) {
-      control?.setErrors({ invalidDate: true });
-      return;
-    }
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const d = new Date(parsed.getFullYear(), parsed.getMonth(), parsed.getDate());
-    if (d <= today) {
-      control?.setErrors({ invalidDate: true });
-    } else {
-      if (control?.hasError('invalidDate')) {
-        control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
-        const errors = control.errors;
-        if (errors) {
-          delete errors['invalidDate'];
-          if (Object.keys(errors).length === 0) control.setErrors(null);
-          else control.setErrors(errors);
-        }
-      }
-    }
-  }
 
   buscarInstitucion(): void {
     this.codModularMensaje = '';
@@ -203,33 +143,37 @@ export class Educacion {
             patchValues['nivel'] = ie.nivel || '';
             patchValues['provincia'] = ie.provincia || '';
             patchValues['distrito'] = ie.distrito || '';
-            patchValues['total_matricula'] = ie.total_estudiantes || 0;
+            patchValues['centro_poblado'] = ie.centro_poblado || '';
           }
 
           // Equipamiento
           if (eq) {
+            patchValues['estado_infra'] = Number(eq.estado_infra) || 0;
+            patchValues['aulas_buenas'] = Number(eq.aulas_buenas) || 0;
             patchValues['mobiliario_optimo_porc'] = Number(eq.mobiliario_optimo_porc) || 0;
             patchValues['computadoras_total'] = eq.computadoras_total ?? 0;
-            patchValues['tiene_internet'] = eq.tiene_internet ? true : false;
+            patchValues['servicio_agua'] = eq.servicio_agua || false;
+            patchValues['servicio_desague'] = eq.servicio_desague || false;
+            patchValues['servicio_luz'] = eq.servicio_luz || false;
+            patchValues['tiene_internet'] = eq.tiene_internet || false;
+            patchValues['riesgo_critico'] = eq.riesgo_critico || false;
           }
 
           // Recursos Humanos
           if (rh) {
+            patchValues['total_matricula'] = rh.total_matricula ?? 0;
             patchValues['docentes_requeridos'] = rh.docentes_requeridos ?? 0;
-            patchValues['docentes_asignados'] = rh.docentes_asignados ?? 0;
-            patchValues['personal_administrativo'] = rh.personal_administrativo ?? 0;
+            patchValues['docentes_nombrados'] = rh.docentes_nombrados ?? 0;
+            patchValues['docentes_contratados'] = rh.docentes_contratados ?? 0;
+            patchValues['personal_admin'] = rh.personal_administrativo ?? 0;
+            patchValues['tiene_psicologo'] = rh.tiene_psicologo ? 'SI' : '';
           }
 
-          // Condiciones Básicas
-          if (cb) {
-            patchValues['servicio_agua'] = cb.servicio_agua ? true : false;
-            patchValues['servicio_desague'] = cb.servicio_desague ? true : false;
-            patchValues['servicio_electricidad'] = cb.servicio_electricidad ? true : false;
-            patchValues['estado_critico_infra'] = cb.estado_critico_infra ? true : false;
-          }
+          // Condiciones Básicas (ya incluidas en equipamiento)
 
           // Proyecto de Infraestructura
           if (pr) {
+            patchValues['cui_proyecto'] = pr.cui_proyecto || '';
             patchValues['estado_proyecto'] = pr.estado_proyecto || '';
             patchValues['avance_fisico'] = Number(pr.avance_fisico) || 0;
             patchValues['monto_total'] = Number(pr.monto_total) || 0;
@@ -330,24 +274,24 @@ export class Educacion {
       distrito: rawValues.distrito || '',
       centro_poblado: rawValues.centro_poblado || '',
       cui_proyecto: rawValues.cui_proyecto || '',
-      estado_proyecto: rawValues.estado_proyecto || 'Sin Proyecto',
+      estado_proyecto: rawValues.estado_proyecto || '',
       avance_fisico: Number(rawValues.avance_fisico),
       monto_total: Number(rawValues.monto_total),
       estado_infra: Number(rawValues.estado_infra),
       aulas_buenas: Number(rawValues.aulas_buenas),
       mobiliario_optimo_porc: Number(rawValues.mobiliario_optimo_porc),
       computadoras_total: Number(rawValues.computadoras_total),
-      servicio_agua: !!rawValues.servicio_agua,
-      servicio_desague: !!rawValues.servicio_desague,
-      servicio_luz: !!rawValues.servicio_luz,
-      tiene_internet: !!rawValues.tiene_internet,
-      riesgo_critico: !!rawValues.riesgo_critico,
+      servicio_agua: rawValues.servicio_agua || false,
+      servicio_desague: rawValues.servicio_desague || false,
+      servicio_luz: rawValues.servicio_luz || false,
+      tiene_internet: rawValues.tiene_internet || false,
+      riesgo_critico: rawValues.riesgo_critico || false,
       total_matricula: Number(rawValues.total_matricula),
       docentes_requeridos: Number(rawValues.docentes_requeridos),
       docentes_nombrados: Number(rawValues.docentes_nombrados),
       docentes_contratados: Number(rawValues.docentes_contratados),
       personal_admin: Number(rawValues.personal_admin),
-      tiene_psicologo: rawValues.tiene_psicologo || 'NO',
+      tiene_psicologo: rawValues.tiene_psicologo === 'SI',
       fecha_corte: fechaCorte,
     };
 
@@ -369,7 +313,14 @@ export class Educacion {
   }
 
   private parseBoolean(value: unknown): boolean {
-    return value === true || value === 'true' || value === 'SI' || value === 'Si' || value === 'YES' || value === 'yes';
+    return (
+      value === true ||
+      value === 'true' ||
+      value === 'SI' ||
+      value === 'Si' ||
+      value === 'YES' ||
+      value === 'yes'
+    );
   }
 
   private parseDate(value: unknown): Date | null {
@@ -411,7 +362,7 @@ export class Educacion {
       nivel: '',
       provincia: '',
       distrito: '',
-      total_matricula: 0,
+      centro_poblado: '',
     });
   }
 
@@ -427,7 +378,7 @@ export class Educacion {
       distrito: '',
       centro_poblado: '',
       cui_proyecto: '',
-      estado_proyecto: 'Sin Proyecto',
+      estado_proyecto: '',
       avance_fisico: 0,
       monto_total: 0,
       estado_infra: 0,
@@ -444,8 +395,8 @@ export class Educacion {
       docentes_nombrados: 0,
       docentes_contratados: 0,
       personal_admin: 0,
-      tiene_psicologo: 'NO',
-      fecha_corte: ''
+      tiene_psicologo: '',
+      fecha_corte: '',
     });
   }
 }

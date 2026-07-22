@@ -64,8 +64,6 @@ export class Salud {
 
     avance_financiero: [0, [Validators.min(0), Validators.max(100)]],
 
-    avance_equipamiento: [0, [Validators.min(0), Validators.max(100)]],
-
     monto_total: [0],
 
     monto_devengado: [0],
@@ -504,7 +502,6 @@ export class Salud {
       camas_uci_tot: Number(rawValues.camas_uci_tot),
       camas_uci_disp: Number(rawValues.camas_uci_disp),
       camas_hospitalarias: Number(rawValues.camas_hospitalarias),
-      avance_equipamiento: Number(rawValues.avance_equipamiento),
       equipo_rayos_x: this.parseBoolean(rawValues.equipo_rayos_x),
       planta_oxigeno: this.parseBoolean(rawValues.planta_oxigeno),
       estado_infra: Number(rawValues.estado_infra),

@@ -206,3 +206,81 @@
     grid-column: span 1;
   }
 }
+
+/* ===========================
+   ESTILOS PARA CHECKBOXES
+   =========================== */
+
+.checkbox-section {
+  padding: 20px;
+  margin-top: 10px;
+}
+
+.checkbox-section-title {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #7A1C1C;
+}
+
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  padding: 16px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background-color: #ffffff;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  transition: all 0.2s ease-in-out;
+}
+
+.checkbox-group:hover {
+  border-color: #7A1C1C;
+  box-shadow: 0 2px 8px rgba(122, 28, 28, 0.08);
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #7A1C1C;
+  flex-shrink: 0;
+}
+
+.checkbox-group label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #212529;
+  cursor: pointer;
+  margin: 0;
+  flex: 1;
+}
+
+.checkbox-group input[type="checkbox"]:checked + label {
+  color: #7A1C1C;
+  font-weight: 600;
+}
+
+.checkbox-group:has(input[type="checkbox"]:checked) {
+  background-color: #fff5f5;
+  border-color: #7A1C1C;
+}
+
+@media (max-width: 768px) {
+  .checkbox-grid {
+    grid-template-columns: 1fr;
+  }
+}
