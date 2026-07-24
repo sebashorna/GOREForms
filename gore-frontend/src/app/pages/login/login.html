@@ -36,9 +36,17 @@
                     <input
                         type="text"
                         class="form-control"
+                        [class.is-invalid]="usuarioInvalido"
                         placeholder="Ingrese su usuario"
                         [(ngModel)]="usuario"
-                        name="usuario">
+                        name="usuario"
+                        (input)="limpiarErrorUsuario()">
+
+                    @if(usuarioError){
+                        <div class="invalid-feedback">
+                            {{ usuarioError }}
+                        </div>
+                    }
 
                 </div>
 
@@ -53,9 +61,17 @@
                     <input
                         [type]="mostrarPassword ? 'text' : 'password'"
                         class="form-control"
+                        [class.is-invalid]="passwordInvalido"
                         placeholder="Ingrese su contraseña"
                         [(ngModel)]="password"
-                        name="password">
+                        name="password"
+                        (input)="limpiarErrorPassword()">
+
+                    @if(passwordError){
+                        <div class="invalid-feedback">
+                            {{ passwordError }}
+                        </div>
+                    }
 
                     <button
                         type="button"

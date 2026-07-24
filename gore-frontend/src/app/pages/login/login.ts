@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
@@ -18,6 +18,12 @@ export class Login implements OnInit {
   cargando: boolean = false;
   error: string = '';
 
+  // Validaciones
+  usuarioInvalido: boolean = false;
+  passwordInvalido: boolean = false;
+  usuarioError: string = '';
+  passwordError: string = '';
+
   // 2FA
   mostrar2FA: boolean = false;
   codigo2FA: string = '';
@@ -25,7 +31,8 @@ export class Login implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -44,6 +51,30 @@ export class Login implements OnInit {
 
   ingresar(): void {
     this.error = '';
+    this.usuarioInvalido = false;
+    this.passwordInvalido = false;
+    this.usuarioError = '';
+    this.passwordError = '';
+
+    // Validar campos obligatorios
+    let valido = true;
+
+    if (!this.usuario || this.usuario.trim() === '') {
+      this.usuarioInvalido = true;
+      this.usuarioError = 'El usuario es obligatorio';
+      valido = false;
+    }
+
+    if (!this.password || this.password.trim() === '') {
+      this.passwordInvalido = true;
+      this.passwordError = 'La contraseña es obligatoria';
+      valido = false;
+    }
+
+    if (!valido) {
+      return;
+    }
+
     this.cargando = true;
 
     this.authService.login(this.usuario, this.password, this.recordar).subscribe({
@@ -54,6 +85,7 @@ export class Login implements OnInit {
           // Mostrar formulario 2FA
           this.mostrar2FA = true;
           this.idUsuario2FA = response.id_usuario || null;
+          this.cdr.detectChanges();
         } else {
           // Login exitoso, redirigir
           this.router.navigate(['/dashboard']);
@@ -62,6 +94,7 @@ export class Login implements OnInit {
       error: (error) => {
         this.cargando = false;
         this.error = error.message || 'Error al iniciar sesión';
+        this.cdr.detectChanges();
       }
     });
   }
@@ -84,8 +117,19 @@ export class Login implements OnInit {
       error: (error) => {
         this.cargando = false;
         this.error = error.message || 'Código 2FA inválido';
+        this.cdr.detectChanges();
       }
     });
+  }
+
+  limpiarErrorUsuario(): void {
+    this.usuarioInvalido = false;
+    this.usuarioError = '';
+  }
+
+  limpiarErrorPassword(): void {
+    this.passwordInvalido = false;
+    this.passwordError = '';
   }
 
   togglePassword(): void {

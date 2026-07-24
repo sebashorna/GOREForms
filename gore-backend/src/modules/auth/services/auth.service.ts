@@ -4,6 +4,7 @@ import repository from "../repositories/auth.repository";
 import { LoginDTO } from "../dto/login.dto";
 import { Verify2FADTO } from "../dto/verify-2fa.dto";
 import { LoginResponseDTO } from "../dto/login-response.dto";
+import emailService from "../../../shared/email/email.service";
 
 class AuthService {
 
@@ -37,15 +38,25 @@ class AuthService {
         // Resetear intentos
         await repository.resetearIntentos(usuario.id_usuario);
 
-        // Verificar si requiere 2FA
-        const requiere2FA = usuario.rol === 'ADMIN' || usuario.rol === 'SALUD';
+        // Verificar si requiere 2FA - Activado para todos los usuarios
+        const requiere2FA = true;
 
-        if (requiere2FA) {
+        // Verificar si ya verificó 2FA en las últimas 12 horas
+        const tiene2FAReciente = await repository.tiene2FAVerificadoRecientemente(usuario.id_usuario);
+
+        if (requiere2FA && !tiene2FAReciente) {
             // Generar código 2FA
             const codigo2FA = await repository.crearCodigo2FA(usuario.id_usuario);
             
-            // TODO: Enviar código por email/SMS
-            console.log(`Código 2FA para ${usuario.usuario}: ${codigo2FA}`);
+            // Enviar código por correo electrónico (sin await para no bloquear la respuesta)
+            emailService.enviarCodigo2FA(usuario.correo, codigo2FA, usuario.usuario)
+                .then(() => {
+                    console.log(`Código 2FA enviado a ${usuario.correo} para ${usuario.usuario}`);
+                })
+                .catch((error) => {
+                    console.error(`Error al enviar código 2FA a ${usuario.correo}:`, error);
+                    console.log(`Código 2FA para ${usuario.usuario}: ${codigo2FA}`);
+                });
 
             await repository.registrarAuditoria(usuario.id_usuario, usuario.usuario, ip, true, "Login exitoso - 2FA requerido");
 
@@ -88,8 +99,8 @@ class AuthService {
             throw new Error("Código 2FA inválido o expirado");
         }
 
-        // Obtener usuario
-        const usuario = await repository.buscarPorUsuario(registro2FA.id_usuario.toString());
+        // Obtener usuario por ID
+        const usuario = await repository.buscarPorId(registro2FA.id_usuario);
         
         if (!usuario) {
             throw new Error("Usuario no encontrado");

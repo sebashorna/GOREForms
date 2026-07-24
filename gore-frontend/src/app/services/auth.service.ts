@@ -46,7 +46,20 @@ export class AuthService {
         }
       }),
       catchError(error => {
-        const message = error.error?.message || 'Error al iniciar sesión';
+        console.error('Error login:', error);
+        let message = 'Error al iniciar sesión';
+        if (error.error?.message) {
+          message = error.error.message;
+        } else if (typeof error.error === 'string') {
+          try {
+            const parsed = JSON.parse(error.error);
+            message = parsed.message || message;
+          } catch {
+            message = error.error || message;
+          }
+        } else if (error.message) {
+          message = error.message;
+        }
         return throwError(() => new Error(message));
       })
     );
@@ -62,7 +75,20 @@ export class AuthService {
         }
       }),
       catchError(error => {
-        const message = error.error?.message || 'Código 2FA inválido';
+        console.error('Error 2FA:', error);
+        let message = 'Código 2FA inválido';
+        if (error.error?.message) {
+          message = error.error.message;
+        } else if (typeof error.error === 'string') {
+          try {
+            const parsed = JSON.parse(error.error);
+            message = parsed.message || message;
+          } catch {
+            message = error.error || message;
+          }
+        } else if (error.message) {
+          message = error.message;
+        }
         return throwError(() => new Error(message));
       })
     );

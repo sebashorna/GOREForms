@@ -19,6 +19,22 @@ class AuthRepository {
         });
     }
 
+    async buscarPorId(id_usuario: number) {
+        return prisma.usuarios.findUnique({
+            where: { id_usuario },
+            select: {
+                id_usuario: true,
+                usuario: true,
+                correo: true,
+                password_hash: true,
+                estado: true,
+                intentos_fallidos: true,
+                bloqueado_hasta: true,
+                rol: true,
+            }
+        });
+    }
+
     async validarPassword(password: string, hash: string): Promise<boolean> {
         return bcrypt.compare(password, hash);
     }
@@ -110,6 +126,20 @@ class AuthRepository {
             where: { token, activo: true },
             data: { activo: false }
         });
+    }
+
+    async tiene2FAVerificadoRecientemente(id_usuario: number): Promise<boolean> {
+        const hace12Horas = new Date(Date.now() - 12 * 60 * 60 * 1000);
+        
+        const registro = await prisma.login_2fa.findFirst({
+            where: {
+                id_usuario,
+                usado: true,
+                fecha_creacion: { gte: hace12Horas }
+            }
+        });
+
+        return !!registro;
     }
 
     async registrarAuditoria(
