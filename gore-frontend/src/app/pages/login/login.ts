@@ -122,6 +122,13 @@ export class Login implements OnInit {
     });
   }
 
+  volverALogin(): void {
+    this.mostrar2FA = false;
+    this.codigo2FA = '';
+    this.error = '';
+    this.cargando = false;
+  }
+
   limpiarErrorUsuario(): void {
     this.usuarioInvalido = false;
     this.usuarioError = '';

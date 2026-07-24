@@ -126,6 +126,12 @@
             <!-- Formulario 2FA -->
             @if(mostrar2FA){
 
+                <div class="btn-volver-container">
+                    <button type="button" class="btn-volver" (click)="volverALogin()">
+                        ← Volver
+                    </button>
+                </div>
+
                 <div class="alert alert-info" role="alert">
 
                     <strong>Verificación de dos factores</strong><br>
