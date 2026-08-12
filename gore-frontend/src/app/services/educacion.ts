@@ -10,7 +10,7 @@ export class EducacionService {
 
   private http = inject(HttpClient);
 
-  private api = 'http://localhost:3000/api/educacion';
+  private api = 'http://192.168.2.194:3000/api/educacion';
 
   obtenerInstitucion(id: number): Observable<any> {
     return this.http.get<any>(`${this.api}/${id}`);
@@ -45,7 +45,7 @@ export class EducacionService {
     if (filtros?.fecha_hasta) params.fecha_hasta = filtros.fecha_hasta;
     if (filtros?.usuario) params.usuario = filtros.usuario;
 
-    return this.http.get<any>('http://localhost:3000/api/historial', { params });
+    return this.http.get<any>('http://192.168.2.194:3000/api/historial', { params });
 
   }
 

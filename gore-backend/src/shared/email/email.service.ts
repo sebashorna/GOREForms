@@ -8,10 +8,14 @@ class EmailService {
     this.transporter = nodemailer.createTransport({
       host: env.SMTP_HOST,
       port: env.SMTP_PORT,
-      secure: true, // true para 465, false para 587
+      secure: true, // true para 465 (SSL implícito), false para 587 (STARTTLS)
       auth: {
         user: env.SMTP_USER,
         pass: env.SMTP_PASS,
+      },
+      tls: {
+        // Evita fallos por certificados interceptados por proxies/firewalls corporativos
+        rejectUnauthorized: false,
       },
     });
   }

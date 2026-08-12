@@ -25,7 +25,7 @@ export class HistorialService {
 
   private http = inject(HttpClient);
 
-  private api = 'http://localhost:3000/api/historial';
+  private api = 'http://192.168.2.194:3000/api/historial';
 
   listar(filtros?: HistorialFiltros): Observable<any> {
     let params: any = {};

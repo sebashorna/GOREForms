@@ -10,7 +10,7 @@ export class SaludService {
 
   private http = inject(HttpClient);
 
-  private api = 'http://localhost:3000/api/salud';
+  private api = 'http://192.168.2.194:3000/api/salud';
 
   obtenerEstablecimiento(id: number): Observable<any> {
     return this.http.get<any>(`${this.api}/${id}`);
