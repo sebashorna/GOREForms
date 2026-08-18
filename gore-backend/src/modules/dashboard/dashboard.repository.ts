@@ -4,22 +4,35 @@ class DashboardRepository {
 
     async resumen() {
 
-        const totalProyectos = await prisma.seguimiento_proyectos.count();
+        const [totalSalud, totalEducacion, ultimoSalud, ultimoEducacion] = await Promise.all([
+            prisma.proyectos_inversion.count(),
+            prisma.proyectos_infraestructura.count(),
+            prisma.proyectos_inversion.findFirst({
+                orderBy: { fecha_registro_sistema: 'desc' }
+            }),
+            prisma.proyectos_infraestructura.findFirst({
+                orderBy: { fecha_registro_sistema: 'desc' }
+            }),
+        ]);
 
-        const ultimoRegistro = await prisma.seguimiento_proyectos.findFirst({
+        const totalProyectos = totalSalud + totalEducacion;
 
-            orderBy: {
-                id: "desc"
-            }
+        let ultimoRegistro = null;
 
-        });
+        const fechaSalud = ultimoSalud?.fecha_registro_sistema?.getTime() || 0;
+        const fechaEducacion = ultimoEducacion?.fecha_registro_sistema?.getTime() || 0;
+
+        if (ultimoSalud && ultimoEducacion) {
+            ultimoRegistro = (fechaSalud > fechaEducacion)
+                ? ultimoSalud
+                : ultimoEducacion;
+        } else {
+            ultimoRegistro = ultimoSalud || ultimoEducacion;
+        }
 
         return {
-
             totalProyectos,
-
             ultimoRegistro
-
         };
 
     }
