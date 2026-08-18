@@ -210,22 +210,21 @@ class SaludRepository {
             return;
         }
 
-        await tx.proyectos_inversion.upsert({
+        // Verificar unicidad global del id_proyecto
+        const proyectoExistente = await tx.proyectos_inversion.findUnique({
             where: {
                 id_proyecto: dto.id_proyecto
-            },
-            create: {
+            }
+        });
+
+        if (proyectoExistente) {
+            throw new Error("Proyecto ya existente");
+        }
+
+        await tx.proyectos_inversion.create({
+            data: {
                 id_proyecto: dto.id_proyecto,
                 id_renaes: dto.id_renaes,
-                estado_inversion: dto.estado_inversion,
-                avance_fisico: dto.avance_fisico,
-                avance_financiero: dto.avance_financiero,
-                monto_total: dto.monto_total,
-                monto_devengado: dto.monto_devengado,
-                unidad_ejecutora: dto.unidad_ejecutora,
-                fecha_corte: dto.fecha_corte
-            },
-            update: {
                 estado_inversion: dto.estado_inversion,
                 avance_fisico: dto.avance_fisico,
                 avance_financiero: dto.avance_financiero,

@@ -173,6 +173,15 @@ class EducacionRepository {
             return;
         }
 
+        // Verificar unicidad global del id_proyecto
+        const proyectoExistente = await tx.proyectos_infraestructura.findUnique({
+            where: { id_proyecto: dto.id_proyecto }
+        });
+
+        if (proyectoExistente) {
+            throw new Error("Proyecto ya existente");
+        }
+
         await tx.proyectos_infraestructura.deleteMany({ where: { cod_modular: dto.cod_modular, fecha_corte: dto.fecha_corte } });
 
         await tx.proyectos_infraestructura.create({

@@ -540,7 +540,10 @@ export class Salud {
       },
       error: (err) => {
         console.error(err);
-        this.mensajeGuardado = 'Error al registrar el reporte.';
+        const msg = err?.error?.message || '';
+        this.mensajeGuardado = msg.includes('Proyecto ya existente')
+          ? 'Proyecto ya existente'
+          : 'Error al registrar el reporte.';
       },
     });
   }
