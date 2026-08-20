@@ -19,12 +19,10 @@ const app = express();
 
 app.use(helmet());
 
-app.use(
-    cors({
-        origin: "http://localhost:4200",
-        credentials: true,
-    })
-);
+app.use(cors({
+    origin: "http://192.168.2.194:4200",
+    credentials: true,
+}));
 
 app.use(compression());
 
