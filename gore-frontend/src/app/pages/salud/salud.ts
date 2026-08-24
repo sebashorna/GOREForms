@@ -434,25 +434,42 @@ export class Salud {
       estInversion?.setErrors({ required: true });
     }
 
-    // Validar fecha_corte
-    const fechaCorte = this.form.get('fecha_corte');
-    if (!fechaCorte?.value || fechaCorte.value.trim() === '') {
-      camposFaltantes.push('fecha_corte');
-      fechaCorte?.markAsTouched();
-      fechaCorte?.setErrors({ required: true });
-    }
+        // Validar fecha_corte
+        const fechaCorte = this.form.get('fecha_corte');
+        if (!fechaCorte?.value || fechaCorte.value.trim() === '') {
+          camposFaltantes.push('fecha_corte');
+          fechaCorte?.markAsTouched();
+          fechaCorte?.setErrors({ required: true });
+        }
 
-    return {
-      valido: camposFaltantes.length === 0,
-      camposFaltantes,
-    };
+        // Validar coordenadas (obligatorias: latitud -90 a 90, longitud -180 a 180)
+        const coordLat = Number(this.form.get('coord_lat')?.value);
+        if (!this.form.get('coord_lat')?.value || isNaN(coordLat) || coordLat < -90 || coordLat > 90) {
+          camposFaltantes.push('coord_lat');
+          this.form.get('coord_lat')?.markAsTouched();
+          this.form.get('coord_lat')?.setErrors({ coordenadaInvalida: true });
+        }
+
+        const coordLong = Number(this.form.get('coord_long')?.value);
+        if (!this.form.get('coord_long')?.value || isNaN(coordLong) || coordLong < -180 || coordLong > 180) {
+          camposFaltantes.push('coord_long');
+          this.form.get('coord_long')?.markAsTouched();
+          this.form.get('coord_long')?.setErrors({ coordenadaInvalida: true });
+        }
+
+        return {
+          valido: camposFaltantes.length === 0,
+          camposFaltantes,
+        };
   }
 
   guardarReporte(): void {
     const validacion = this.validarCamposObligatorios();
 
     if (!validacion.valido) {
-      this.mensajeGuardado = 'Falta completar campos';
+      this.mensajeGuardado = validacion.camposFaltantes.includes('coord_lat') || validacion.camposFaltantes.includes('coord_long')
+        ? 'Latitud/Longitud inválidas. Latitud: -90 a 90, Longitud: -180 a 180.'
+        : 'Falta completar campos';
       return;
     }
 
@@ -469,8 +486,8 @@ export class Salud {
       provincia: rawValues.provincia || '',
       distrito: rawValues.distrito || '',
       tipo: rawValues.tipo || '',
-      coord_lat: Number(rawValues.coord_lat),
-      coord_long: Number(rawValues.coord_long),
+      coord_lat: Number(Number(rawValues.coord_lat).toFixed(6)),
+      coord_long: Number(Number(rawValues.coord_long).toFixed(6)),
       poblacion_asignada: Number(rawValues.poblacion_asignada),
       id_proyecto: Number(rawValues.id_proyecto),
       estado_inversion: rawValues.estado_inversion || '',

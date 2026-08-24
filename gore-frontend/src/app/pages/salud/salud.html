@@ -75,12 +75,18 @@
 
             <div class="form-group">
                 <label for="coor_latitud">Latitud</label>
-                <input type="text" id="coor_lat" formControlName="coord_lat" />
+                <input type="number" id="coor_lat" formControlName="coord_lat" step="0.000001" min="-90" max="90" />
+                <div class="field-message" *ngIf="form.get('coord_lat')?.errors?.['coordenadaInvalida']">
+                    Latitud debe estar entre -90 y 90.
+                </div>
             </div>
 
             <div class="form-group">
                 <label for="coor_longitud">Longitud</label>
-                <input type="text" id="coor_long" formControlName="coord_long" />
+                <input type="number" id="coor_long" formControlName="coord_long" step="0.000001" min="-180" max="180" />
+                <div class="field-message" *ngIf="form.get('coord_long')?.errors?.['coordenadaInvalida']">
+                    Longitud debe estar entre -180 y 180.
+                </div>
             </div>
         </div>
     </div>
