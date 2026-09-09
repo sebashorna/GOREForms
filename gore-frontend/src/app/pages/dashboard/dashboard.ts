@@ -15,27 +15,20 @@ export class Dashboard implements OnInit {
   ultimoRegistro = '-';
 
   ngOnInit(): void {
-    console.log('[Dashboard] ngOnInit - estado inicial:', this.totalProyectos, this.ultimoRegistro);
-
     this.dashboardService.obtenerResumen().subscribe({
       next: (resp) => {
-        console.log('[Dashboard] Respuesta recibida:', JSON.stringify(resp));
         if (resp.success && resp.data) {
           this.totalProyectos = resp.data.totalProyectos || 0;
-          console.log('[Dashboard] totalProyectos asignado:', this.totalProyectos);
 
           const fecha = resp.data.ultimoRegistro?.fecha_registro_sistema;
           if (fecha) {
             this.ultimoRegistro = this.formatearFecha(new Date(fecha));
-            console.log('[Dashboard] ultimoRegistro asignado:', this.ultimoRegistro);
           }
           this.cdr.detectChanges();
-        } else {
-          console.warn('[Dashboard] success/data ausente:', resp);
         }
       },
       error: (err) => {
-        console.error('[Dashboard] Error al obtener resumen:', err);
+        console.error('Error al obtener resumen del dashboard:', err);
       },
     });
   }
