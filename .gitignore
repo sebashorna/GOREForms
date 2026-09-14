@@ -1,0 +1,43 @@
+# =========================================================================
+# .GITIGNORE GENERAL - PROYECTO GORE
+# =========================================================================
+
+# --- DEPENDENCIAS (se recrean con 'npm install') ---
+node_modules/
+
+# --- COMPILACION / ARTEFACTOS GENERADOS ---
+dist/
+generated/
+out-tsc/
+bazel-out/
+.angular/cache/
+coverage/
+
+# --- CONFIGURACIONES LOCALES E IDEs ---
+.vscode/
+.idea/
+*.suo
+*.ntvs
+*.njsproj
+*.sln
+*.sw
+.history/
+
+# --- CREDENCIALES Y CONFIGURACION LOCAL (¡NUNCA subir a GitHub!) ---
+.env
+.env.*
+!.env.example
+
+# --- LOGS Y TEMPORALES ---
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.tmp
+*.bak
+
+# --- SISTEMA OPERATIVO ---
+Thumbs.db
+desktop.ini
+.DS_Store
