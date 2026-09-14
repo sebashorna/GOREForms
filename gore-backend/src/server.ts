@@ -8,6 +8,6 @@ const PORT = env.PORT;
 
 app.listen(PORT, () => {
 
-    logger.info(`Servidor iniciado en http://localhost:${PORT}`);
+    logger.info(`Servidor iniciado en http://192.168.2.194:${PORT}`);
 
 });
